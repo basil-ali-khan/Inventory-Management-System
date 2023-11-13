@@ -21,3 +21,21 @@ connection = pyodbc.connect(connection_string)
 
 # Create a cursor to interact with the database
 cursor = connection.cursor()
+
+class UI(QtWidgets.QMainWindow):   
+
+    def __init__(self):
+        # Call the inherited classes __init__ method
+        super(UI, self).__init__() 
+        
+        # Load the .ui file
+        uic.loadUi('Screens/UserAuthentication.ui', self)
+
+
+
+
+
+app = QApplication(sys.argv)
+loginScreen = UI()
+loginScreen.show()
+sys.exit(app.exec())
