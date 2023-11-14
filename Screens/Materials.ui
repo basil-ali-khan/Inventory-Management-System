@@ -39,7 +39,7 @@
      <rect>
       <x>20</x>
       <y>120</y>
-      <width>731</width>
+      <width>590</width>
       <height>181</height>
      </rect>
     </property>
@@ -129,11 +129,6 @@
     </property>
     <item>
      <property name="text">
-      <string>Material ID</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>Material Name</string>
      </property>
     </item>
@@ -164,8 +159,8 @@
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>70</y>
+      <x>630</x>
+      <y>240</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -332,8 +327,8 @@
    <widget class="QPushButton" name="pushButton_5">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>70</y>
+      <x>630</x>
+      <y>160</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -368,6 +363,19 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>70</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Search</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -375,7 +383,7 @@
      <x>0</x>
      <y>0</y>
      <width>771</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

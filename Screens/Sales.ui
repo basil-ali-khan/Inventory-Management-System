@@ -155,12 +155,12 @@
     </column>
     <column>
      <property name="text">
-      <string>User ID</string>
+      <string>User Name</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Customer ID</string>
+      <string>Customer Name</string>
      </property>
     </column>
     <column>
@@ -179,7 +179,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Delete</string>
+     <string>Edit</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">

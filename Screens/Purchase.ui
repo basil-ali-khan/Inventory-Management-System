@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>30</y>
-      <width>141</width>
+      <width>191</width>
       <height>51</height>
      </rect>
     </property>
@@ -160,7 +160,7 @@
     </column>
     <column>
      <property name="text">
-      <string>Vendor ID</string>
+      <string>Vendor Name</string>
      </property>
     </column>
    </widget>
@@ -174,7 +174,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Delete</string>
+     <string>Edit</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -194,7 +194,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>61</width>
+       <width>71</width>
        <height>16</height>
       </rect>
      </property>
@@ -240,12 +240,12 @@
       <rect>
        <x>200</x>
        <y>30</y>
-       <width>55</width>
+       <width>91</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Vendor ID</string>
+      <string>Vendor Name</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_6">
@@ -452,7 +452,7 @@
      <x>0</x>
      <y>0</y>
      <width>846</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

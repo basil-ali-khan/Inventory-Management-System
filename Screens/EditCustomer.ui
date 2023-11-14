@@ -258,7 +258,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Done</string>
+     <string>Save</string>
     </property>
    </widget>
   </widget>
