@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1168</width>
-    <height>456</height>
+    <width>1202</width>
+    <height>461</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
      <string>Vendors</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="vendorTable">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -471,8 +471,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1168</width>
-     <height>21</height>
+     <width>1202</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
