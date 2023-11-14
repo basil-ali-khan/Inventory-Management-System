@@ -1,7 +1,8 @@
 # Importing essential modules
-from PyQt6 import QtWidgets, uic
+import typing
+from PyQt6 import QtCore, QtWidgets, uic
 from PyQt6.QtCore import QDate
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
+from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 import sys
 import pyodbc
 import VendorScreen
@@ -23,6 +24,22 @@ connection = pyodbc.connect(connection_string)
 # Create a cursor to interact with the database
 cursor = connection.cursor()
 
+class EditVendorScreen(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(EditVendorScreen, self).__init__()
+        uic.loadUi("Screens/EditVendors.ui", self)
+
+
+
+class AddVendorMessageBox(QMessageBox):
+    def __init__(self, message, title):
+        super().__init__()
+
+        self.setIcon(QMessageBox.Icon.Information)
+        self.setText(message)
+        self.setWindowTitle(title)
+        self.addButton(QMessageBox.StandardButton.Close)
+
 class VendorScreen(QtWidgets.QMainWindow):   
     def __init__(self):
         # Call the inherited classes __init__ method
@@ -34,6 +51,8 @@ class VendorScreen(QtWidgets.QMainWindow):
         self.PopulateVendorTable()        
 
         self.addVendorButton.clicked.connect(self.AddVendor)
+
+        self.editVendorButton.clicked.connect(self.EditVendor)
 
 
     def PopulateVendorTable(self):
@@ -53,9 +72,21 @@ class VendorScreen(QtWidgets.QMainWindow):
         email = self.vendorEmail.text()
         address = self.vendorAddress.text()
 
-        sql_query = "insert into vendor values(?, ?, ?, ?, ?)"
-        cursor.execute(sql_query, (name, contact, backupContact, email, address))
-        connection.commit()
+        if name == '' or contact == '' or backupContact == '' or email == '' or address == '':
+            self.notAddedMsg = AddVendorMessageBox("Please enter complete information to add vendor", "Failed")
+            self.notAddedMsg.show()
+        else:
+            sql_query = "insert into vendor values(?, ?, ?, ?, ?)"
+            cursor.execute(sql_query, (name, contact, backupContact, email, address))
+            connection.commit()
+
+            self.addMsg = AddVendorMessageBox("Vendor added successfully", "Success")
+            self.addMsg.show()
+    
+    def EditVendor(self):
+        self.editVendor = EditVendorScreen()
+        self.editVendor.show()
+        
 
 class UI(QtWidgets.QMainWindow):   
     def __init__(self):
