@@ -7,7 +7,8 @@ import sys
 import pyodbc
 import VendorScreen
 
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+# server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+server = 'LAPTOP-MNMD5RBU'
 database = 'Inventory_Management_System'  # Name of your Northwind database
 use_windows_authentication = True  # Set to True to use Windows Authentication
 username = 'your_username'  # Specify a username if not using Windows Authentication
