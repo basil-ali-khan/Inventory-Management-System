@@ -114,7 +114,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Password</string>
+     <string/>
     </property>
     <property name="frame">
      <bool>true</bool>
@@ -140,7 +140,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Username</string>
+     <string/>
     </property>
     <property name="frame">
      <bool>true</bool>
@@ -366,7 +366,7 @@
      <x>0</x>
      <y>0</y>
      <width>1099</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
