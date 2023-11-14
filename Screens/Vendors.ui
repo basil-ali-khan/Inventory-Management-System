@@ -296,7 +296,7 @@
       <string>Contact Number</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="vendorNameBox">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -306,7 +306,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
+    <widget class="QLineEdit" name="vendorContactNumber">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -316,7 +316,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_10">
+    <widget class="QLineEdit" name="vendorBackupContact">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -339,7 +339,7 @@
       <string>Backup Contact Number</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_3">
+    <widget class="QLineEdit" name="vendorEmail">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -378,7 +378,7 @@
       <string>Address</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_4">
+    <widget class="QLineEdit" name="vendorAddress">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -391,7 +391,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="addVendorButton">
      <property name="geometry">
       <rect>
        <x>120</x>

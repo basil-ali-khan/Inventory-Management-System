@@ -33,6 +33,8 @@ class VendorScreen(QtWidgets.QMainWindow):
 
         self.PopulateVendorTable()        
 
+        self.addVendorButton.clicked.connect(self.AddVendor)
+
 
     def PopulateVendorTable(self):
         cursor.execute("SELECT * FROM Vendor")
@@ -44,12 +46,16 @@ class VendorScreen(QtWidgets.QMainWindow):
                 item = QTableWidgetItem(str(cell_data))
                 self.vendorTable.setItem(row_index, col_index, item)
 
-        # cursor.execute("Select count(vendorID) from Vendor")
-        # row_count = 1
-        # for i in cursor.fetchall():
-        #     row_count += 1
-        # # row_count = len(cursor.fetchall())
-        # self.vendorTable.setRowCount(row_count)
+    def AddVendor(self):
+        name = self.vendorNameBox.text()
+        contact = self.vendorContactNumber.text()
+        backupContact = self.vendorBackupContact.text()
+        email = self.vendorEmail.text()
+        address = self.vendorAddress.text()
+
+        sql_query = "insert into vendor values(?, ?, ?, ?, ?)"
+        cursor.execute(sql_query, (name, contact, backupContact, email, address))
+        connection.commit()
 
 class UI(QtWidgets.QMainWindow):   
     def __init__(self):
