@@ -315,7 +315,7 @@
    </widget>
    <widget class="QPushButton" name="vendorsButton">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="geometry">
      <rect>
