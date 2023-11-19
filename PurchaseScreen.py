@@ -13,10 +13,10 @@ password = 'your_password'  # Specify a password if not using Windows Authentica
 
 
 
-class VendorScreen(QtWidgets.QMainWindow):   
+class PurchaseScreen(QtWidgets.QMainWindow):   
     def __init__(self):
         # Call the inherited classes __init__ method
-        super(VendorScreen, self).__init__() 
+        super(PurchaseScreen, self).__init__() 
         
         # Load the .ui file
-        uic.loadUi('Screens/Vendors.ui', self)
+        uic.loadUi('Screens/Purchase.ui', self)

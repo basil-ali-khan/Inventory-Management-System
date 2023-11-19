@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Inventory</string>
+   <string>Vendors</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
@@ -406,7 +406,7 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="deleteVendorButton">
     <property name="geometry">
      <rect>
       <x>1030</x>
