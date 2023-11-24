@@ -5,11 +5,11 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidge
 import sys
 import pyodbc
 
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-database = 'Northwind'  # Name of your Northwind database
-use_windows_authentication = True  # Set to True to use Windows Authentication
-username = 'your_username'  # Specify a username if not using Windows Authentication
-password = 'your_password'  # Specify a password if not using Windows Authentication
+server = 'localhost'
+database = 'Inventory_Management_System'  # Name of your Northwind database
+use_windows_authentication = False  # Set to True to use Windows Authentication
+username = 'sa'  # Specify a username if not using Windows Authentication
+password = 'Sirmehdi69'  # Specify a password if not using Windows Authentication
 
 
 
