@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1202</width>
-    <height>461</height>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
       <x>20</x>
       <y>170</y>
       <width>791</width>
-      <height>221</height>
+      <height>281</height>
      </rect>
     </property>
     <row>
@@ -140,20 +140,15 @@
      </property>
     </column>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="searchVendorCriteria">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>20</x>
       <y>90</y>
       <width>131</width>
       <height>41</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Vendor ID</string>
-     </property>
-    </item>
     <item>
      <property name="text">
       <string>Vendor Name</string>
@@ -166,31 +161,21 @@
     </item>
     <item>
      <property name="text">
-      <string>Backup Contact</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>Email</string>
      </property>
     </item>
-    <item>
-     <property name="text">
-      <string>Address</string>
-     </property>
-    </item>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="searchVendorValue">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>170</x>
       <y>90</y>
-      <width>651</width>
+      <width>501</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>  Search Vendors</string>
+     <string/>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -389,8 +374,8 @@
    <widget class="QPushButton" name="editVendorButton">
     <property name="geometry">
      <rect>
-      <x>890</x>
-      <y>20</y>
+      <x>850</x>
+      <y>410</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -406,11 +391,11 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="deleteVendorButton">
     <property name="geometry">
      <rect>
-      <x>1030</x>
-      <y>20</y>
+      <x>1010</x>
+      <y>410</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -426,6 +411,26 @@
      <string>Delete</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="searchVendorButton">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>90</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Search</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -433,7 +438,7 @@
      <x>0</x>
      <y>0</y>
      <width>1202</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
