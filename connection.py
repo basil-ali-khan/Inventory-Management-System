@@ -136,7 +136,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorID.setDisabled(True)
         self.VendorName.setDisabled(True)
 
-        self.AddMaterial.clicked.connect(self.add_material)
+        self.AddMaterialVendor.clicked.connect(self.add_material)
         self.AddPurchase.clicked.connect(self.add_purchase)
         self.ClearPurchase.clicked.connect(self.clear)
 
@@ -181,33 +181,41 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorName.setText(VendorName)
 
     def add_material(self):
-        row_position = self.purchaseDetailsTable.rowCount()
-        self.purchaseDetailsTable.insertRow(row_position)
 
-        self.purchaseDetailsTable.setItem(
-            row_position, 0, QTableWidgetItem(self.MaterialID.text()))
-        self.purchaseDetailsTable.setItem(
-            row_position, 1, QTableWidgetItem(self.MaterialName.text()))
-        self.purchaseDetailsTable.setItem(
-            row_position, 2, QTableWidgetItem(self.UnitPrice.text()))
-        self.purchaseDetailsTable.setItem(
-            row_position, 3, QTableWidgetItem(self.Quantity.text()))
-        self.purchaseDetailsTable.setItem(
-            row_position, 4, QTableWidgetItem(self.VendorID.text()))        
-        self.purchaseDetailsTable.setItem(
-            row_position, 5, QTableWidgetItem(self.VendorName.text()))  
+        if self.MaterialID == "" or self.MaterialName == "" or self.UnitPrice == "" or self.Quantity == "" or self.VendorID == "" or self.VendorName == "":
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please Select All Required Attributes!")
+            msgBox.setWindowTitle("Confirmation Box")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
 
-        header = self.purchaseDetailsTable.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        else:
+            row_position = self.purchaseDetailsTable.rowCount()
+            self.purchaseDetailsTable.insertRow(row_position)
 
-        self.MaterialID.setText("")
-        self.MaterialName.setText("")
-        self.UnitPrice.setText("")
-        self.Quantity.setText("")
-        self.VendorID.setText("")
-        self.VendorName.setText("")
+            self.purchaseDetailsTable.setItem(
+                row_position, 0, QTableWidgetItem(self.MaterialID.text()))
+            self.purchaseDetailsTable.setItem(
+                row_position, 1, QTableWidgetItem(self.MaterialName.text()))
+            self.purchaseDetailsTable.setItem(
+                row_position, 2, QTableWidgetItem(self.UnitPrice.text()))
+            self.purchaseDetailsTable.setItem(
+                row_position, 3, QTableWidgetItem(self.Quantity.text()))
+            self.purchaseDetailsTable.setItem(
+                row_position, 4, QTableWidgetItem(self.VendorID.text()))        
+            self.purchaseDetailsTable.setItem(
+                row_position, 5, QTableWidgetItem(self.VendorName.text()))  
+
+            header = self.purchaseDetailsTable.horizontalHeader()
+            header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+            header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+            header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+
+            self.MaterialID.setText("")
+            self.MaterialName.setText("")
+            self.UnitPrice.setText("")
+            self.Quantity.setText("")
+            self.VendorID.setText("")
+            self.VendorName.setText("")
 
     def add_purchase(self):
 
