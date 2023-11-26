@@ -99,6 +99,19 @@ class UI(QtWidgets.QMainWindow):
         ###hardcoded for now, will later be enabled only if user has admin priveleges
         self.vendorsButton.setEnabled(True)
         self.vendorsButton.clicked.connect(self.OpenVendorScreen)
+<<<<<<< Updated upstream
+=======
+        self.productsButton.clicked.connect(self.OpenProductsScreen)
+        self.materialButton.clicked.connect(self.OpenMaterialScreen)
+
+    def OpenProductsScreen(self):
+        self.products = ProductsClass.ProductScreen()
+        self.products.show()
+
+    def OpenMaterialScreen(self):
+        self.materials = MaterialClass.Material()
+        self.materials.show()
+>>>>>>> Stashed changes
 
 
     def OpenVendorScreen(self):
