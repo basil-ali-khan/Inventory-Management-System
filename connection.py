@@ -99,26 +99,26 @@ class VendorScreen(QtWidgets.QMainWindow):
 # ---------------------------------------------------------------------------------
 
 class ViewPurchaseScreen(QtWidgets.QMainWindow):
-    def __init__(self, purchase_id, vendor_id, purchase_date, total_amount):
+    def __init__(self, purchase_id, purchase_date, total_amount, vendor_id):
         super(ViewPurchaseScreen, self).__init__() 
         uic.loadUi("Screens/ViewPurchase.ui", self)
 
         self.purchase_id = int(purchase_id)
-        self.vendor_id = int(vendor_id)
-        self.purchase_date = int(purchase_date)
+        self.purchase_date = QDate.fromString(str(purchase_date), 'yyyy-MM-dd')
         self.total_amount = int(total_amount)
+        self.vendor_id = int(vendor_id)
 
-        self.viewPurchaseId.setText(self.purchase_id)
+        self.viewPurchaseId.setText(str(self.purchase_id))
         self.viewPurchaseId.setDisabled(True)
 
-        self.viewVendorId.setText(self.vendor_id)
-        self.viewVendorId.setDisabled(True)
-
-        self.viewPurchaseDate.setText(self.purchase_date)
+        self.viewPurchaseDate.setDate(self.purchase_date)
         self.viewPurchaseDate.setDisabled(True)
 
-        self.viewTotalAmount.setText(self.total_amount)
+        self.viewTotalAmount.setText(str(self.total_amount))
         self.viewTotalAmount.setDisabled(True)
+
+        self.viewVendorId.setText(str(self.vendor_id))
+        self.viewVendorId.setDisabled(True)
 
 class AddPurchaseScreen(QtWidgets.QMainWindow):
     def __init__(self):
@@ -182,7 +182,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
 
     def add_material(self):
 
-        if self.MaterialID == "" or self.MaterialName == "" or self.UnitPrice == "" or self.Quantity == "" or self.VendorID == "" or self.VendorName == "":
+        if self.MaterialID == None or self.MaterialName == None or self.UnitCost == None or self.Quantity == None or self.VendorID == None or self.VendorName == None:
             msgBox = QtWidgets.QMessageBox()
             msgBox.setText("Please Select All Required Attributes!")
             msgBox.setWindowTitle("Confirmation Box")
@@ -197,87 +197,76 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
             self.purchaseDetailsTable.setItem(
                 row_position, 1, QTableWidgetItem(self.MaterialName.text()))
             self.purchaseDetailsTable.setItem(
-                row_position, 2, QTableWidgetItem(self.UnitPrice.text()))
+                row_position, 2, QTableWidgetItem(self.VendorID.text()))        
             self.purchaseDetailsTable.setItem(
-                row_position, 3, QTableWidgetItem(self.Quantity.text()))
+                row_position, 3, QTableWidgetItem(self.VendorName.text()))
             self.purchaseDetailsTable.setItem(
-                row_position, 4, QTableWidgetItem(self.VendorID.text()))        
+                row_position, 4, QTableWidgetItem(self.UnitCost.text()))
             self.purchaseDetailsTable.setItem(
-                row_position, 5, QTableWidgetItem(self.VendorName.text()))  
+                row_position, 5, QTableWidgetItem(self.Quantity.text()))
 
-            header = self.purchaseDetailsTable.horizontalHeader()
-            header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-            header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-            header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+            # header = self.purchaseDetailsTable.horizontalHeader()
+            # header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+            # header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+            # header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
 
             self.MaterialID.setText("")
             self.MaterialName.setText("")
-            self.UnitPrice.setText("")
+            self.UnitCost.setText("")
             self.Quantity.setText("")
             self.VendorID.setText("")
             self.VendorName.setText("")
 
     def add_purchase(self):
 
-        # Retrieve the newly inserted order ID
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+
         cursor.execute("SELECT max(purchaseid) AS PurchaseID from Purchase")
         result = cursor.fetchone()
         PurchaseID = result[0]+1
 
-        # Get order information from input fields
         PurchaseDate = self.PurchaseDate.date().toString("yyyy-MM-dd")
-        UnitPrice = self.UnitPrice.text()
-        Quantity = self.Quantity.text()
-        VendorID = self.VendorID.text()
-
-        # TODO: Provide the  connection string to connect to the Northwind database
-        connection = pyodbc.connect(connection_string)
-
-        cursor = connection.cursor()
-
-        # TODO: Write SQL query with parameters to insert Purchase
-        sql_query = """
-                    INSERT INTO [Purchase]
-                    ([PurchaseID], [PurchaseDate], [TotalAmount], [VendorID])
-                    VALUES (?, ?, ?, ?)
-                """
-        
-        # Execute the SQL query with parameter values
-        cursor.execute(sql_query, (int(PurchaseID), PurchaseDate, int(UnitPrice*Quantity), int(VendorID)))
-        connection.commit()
-
-        # Show a message box with the order ID
-        QtWidgets.QMessageBox.information(
-            self, "Purchase Added", f"Purchase ID: {PurchaseID} has been added successfully.")
 
         num_rows = self.purchaseDetailsTable.rowCount()
+        TotalAmount = 0
+        for row in range(num_rows):
+            TotalAmount = TotalAmount + int(self.purchaseDetailsTable.item(row, 4).text()) * int(self.purchaseDetailsTable.item(row, 5).text())
+
+        VendorID = int(self.purchaseDetailsTable.item(row, 2).text())
+
+        sql_query = """
+            INSERT INTO [Purchase]
+            ([purchaseDate], [totalAmount], [vendorID])
+            VALUES (?, ?, ?)
+        """
+        cursor.execute(sql_query, (PurchaseDate, int(TotalAmount), int(VendorID)))
+        connection.commit()
 
         for row in range(num_rows):
 
             MaterialID = int(self.purchaseDetailsTable.item(row, 0).text())
-            UnitPrice = int(self.purchaseDetailsTable.item(row, 2).text())
-            Quantity = int(self.purchaseDetailsTable.item(row, 3).text())
-            VendorID = int(self.purchaseDetailsTable.item(row, 4).text())
-
-            # TODO: Write SQL query with parameters to insert Purchase
+            VendorID = int(self.purchaseDetailsTable.item(row, 2).text())
+            UnitCost = int(self.purchaseDetailsTable.item(row, 4).text())
+            Quantity = int(self.purchaseDetailsTable.item(row, 5).text())
 
             sql_query = """
                         INSERT INTO [PurchaseMaterial]
-                        ([PurchaseID], [MaterialID], [Quantity], [UnitPrice], [VendorID])
+                        ([purchaseid], [materialID], [quantity], [cost])
                         VALUES (?, ?, ?, ?)
                     """
-
-            # Execute the SQL query with parameter values
-            cursor.execute(sql_query, (int(PurchaseID), int(MaterialID), int(Quantity), int(UnitPrice), int(VendorID)))
+            cursor.execute(sql_query, (int(PurchaseID), int(MaterialID), int(Quantity), int(UnitCost)))
             connection.commit()
 
-        # Close the database connection
+        QtWidgets.QMessageBox.information(
+            self, "Purchase Added", f"Purchase ID: {PurchaseID} has been added successfully.")
+
         connection.close()
 
     def clear(self):
         self.MaterialID.setText("")
         self.MaterialName.setText("")
-        self.UnitPrice.setText("")
+        self.UnitCost.setText("")
         self.Quantity.setText("")
         self.VendorID.setText("")
         self.VendorName.setText("")
@@ -294,6 +283,7 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         self.viewPurchaseButton.clicked.connect(self.ViewPurchase)
         self.addPurchaseButton.clicked.connect(self.AddPurchase)
         self.deletePurchaseButton.clicked.connect(self.DeletePurchase)
+        self.searchPurchaseButton.clicked.connect(self.SearchPurchase)
 
     def PopulatePurchaseTable(self):
 
@@ -310,12 +300,12 @@ class PurchaseScreen(QtWidgets.QMainWindow):
             
         selected_row = self.purchaseTable.currentRow()
 
-        purchase_id = int(self.purchaseTable.item(selected_row, 0).text())
-        vendor_id = int(self.purchaseTable.item(selected_row, 1).text())
-        purchase_date = int(self.purchaseTable.item(selected_row, 2).text())
-        total_amount = int(self.purchaseTable.item(selected_row, 3).text())
+        purchase_id = str(self.purchaseTable.item(selected_row, 0).text())
+        purchase_date = str(self.purchaseTable.item(selected_row, 1).text())
+        total_amount = str(self.purchaseTable.item(selected_row, 2).text()) 
+        vendor_id= str(self.purchaseTable.item(selected_row, 3).text())
 
-        self.viewPurchase = ViewPurchaseScreen(purchase_id, vendor_id, purchase_date, total_amount)
+        self.viewPurchase = ViewPurchaseScreen(purchase_id, purchase_date, total_amount, vendor_id)
         self.viewPurchase.show()
             
     def AddPurchase(self):
@@ -340,6 +330,41 @@ class PurchaseScreen(QtWidgets.QMainWindow):
             # # Delete the data from the SQL database
             # cursor.execute(f"DELETE FROM Purchase WHERE PurchaseID = ?", purchase_id)
             # connection.commit()
+
+    def SearchPurchase(self):
+        purchaseId = self.searchPurchaseId.text() or None
+        vendorId = self.searchVendorId.text() or None
+        fromDate = self.searchFromDate.date().toString("yyyy-MM-dd") or None
+        toDate = self.searchToDate.date().toString("yyyy-MM-dd") or None
+
+        if fromDate == '2000-01-01':
+            fromDate = ''
+        
+        elif toDate == '2000-01-01':
+            toDate = ''
+
+        elif fromDate == '2000-01-01' and toDate == '2000-01-01':
+            fromDate = ''
+            toDate = ''
+
+        query = """
+        SELECT *
+        FROM Purchase
+        WHERE 
+            (purchaseID = ? OR ? IS NULL)
+            AND (vendorID = ? OR ? IS NULL)
+            AND ((purchaseDate BETWEEN ? AND ?) OR (? = '' OR ? = ''))
+        """
+
+        cursor.execute(query, (purchaseId, purchaseId, vendorId, vendorId, fromDate, toDate, fromDate, toDate))
+
+        self.purchaseTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.purchaseTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.purchaseTable.setItem(row_index, col_index, item)
 
 class UI(QtWidgets.QMainWindow):   
 

@@ -261,7 +261,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Unit Price</string>
+      <string>Unit Cost</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -277,12 +277,12 @@
       <string>Quantity</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="UnitPrice">
+    <widget class="QLineEdit" name="UnitCost">
      <property name="geometry">
       <rect>
        <x>350</x>
        <y>190</y>
-       <width>131</width>
+       <width>121</width>
        <height>31</height>
       </rect>
      </property>
@@ -299,7 +299,7 @@
     <widget class="QLineEdit" name="Quantity">
      <property name="geometry">
       <rect>
-       <x>580</x>
+       <x>570</x>
        <y>190</y>
        <width>121</width>
        <height>31</height>
@@ -659,22 +659,22 @@
      </column>
      <column>
       <property name="text">
-       <string>Unit Price</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Quantity</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Vendor ID</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Vendor Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Unit Price</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Quantity</string>
       </property>
      </column>
     </widget>

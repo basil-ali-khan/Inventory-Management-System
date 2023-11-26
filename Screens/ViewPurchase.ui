@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>393</width>
-    <height>394</height>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>20</x>
       <y>20</y>
       <width>351</width>
-      <height>331</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -48,6 +48,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
@@ -70,6 +73,9 @@
        <width>141</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -98,34 +104,11 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
        <x>190</x>
        <y>100</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Vendor Name</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="viewVendorName">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>120</y>
-       <width>141</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>260</y>
        <width>91</width>
        <height>16</height>
       </rect>
@@ -137,57 +120,14 @@
     <widget class="QLineEdit" name="viewTotalAmount">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>280</y>
-       <width>141</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="viewMaterialName">
-     <property name="geometry">
-      <rect>
        <x>190</x>
-       <y>200</y>
+       <y>120</y>
        <width>141</width>
        <height>31</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QLineEdit" name="viewMaterialId">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>200</y>
-       <width>141</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_6">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>180</y>
-       <width>81</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Material ID</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_7">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>180</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Material Name</string>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>
