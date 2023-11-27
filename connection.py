@@ -32,7 +32,6 @@
 #         uic.loadUi("Screens/EditVendors.ui", self)
 
 
-
 # class AddVendorMessageBox(QMessageBox):
 #     def __init__(self, message, title):
 #         super().__init__()
@@ -42,15 +41,15 @@
 #         self.setWindowTitle(title)
 #         self.addButton(QMessageBox.StandardButton.Close)
 
-# class VendorScreen(QtWidgets.QMainWindow):   
+# class VendorScreen(QtWidgets.QMainWindow):
 #     def __init__(self):
 #         # Call the inherited classes __init__ method
-#         super(VendorScreen, self).__init__() 
-        
+#         super(VendorScreen, self).__init__()
+
 #         # Load the .ui file
 #         uic.loadUi('Screens/Vendors.ui', self)
 
-#         self.PopulateVendorTable()        
+#         self.PopulateVendorTable()
 
 #         self.addVendorButton.clicked.connect(self.AddVendor)
 
@@ -84,17 +83,17 @@
 
 #             self.addMsg = AddVendorMessageBox("Vendor added successfully", "Success")
 #             self.addMsg.show()
-    
+
 #     def EditVendor(self):
 #         self.editVendor = EditVendorScreen()
 #         self.editVendor.show()
-        
 
-# class UI(QtWidgets.QMainWindow):   
+
+# class UI(QtWidgets.QMainWindow):
 #     def __init__(self):
 #         # Call the inherited classes __init__ method
-#         super(UI, self).__init__() 
-        
+#         super(UI, self).__init__()
+
 #         # Load the .ui file
 #         uic.loadUi('Screens/UserAuthentication.ui', self)
 #         self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
@@ -117,7 +116,7 @@
 #     def OpenVendorScreen(self):
 #         self.vendor = VendorScreen()
 #         self.vendor.show()
-        
+
 #     def CheckPrivilege(self):
 #         username = self.username.text()
 #         password = self.password.text()
@@ -154,8 +153,6 @@
 #         self.password.clear()
 
 
-
-
 # app = QApplication(sys.argv)
 # loginScreen = UI()
 # loginScreen.show()
@@ -165,7 +162,7 @@
 import typing
 from PyQt6 import QtCore, QtWidgets, uic
 from PyQt6.QtCore import QDate
-from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
+from PyQt6.QtWidgets import QApplication, QMessageBox, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 import sys
 import pyodbc
 import VendorClass
@@ -192,11 +189,11 @@ connection = pyodbc.connect(connection_string)
 cursor = connection.cursor()
 
 
-class UI(QtWidgets.QMainWindow):   
+class UI(QtWidgets.QMainWindow):
     def __init__(self):
         # Call the inherited classes __init__ method
-        super(UI, self).__init__() 
-        
+        super(UI, self).__init__()
+
         # Load the .ui file
         uic.loadUi('Screens/UserAuthentication.ui', self)
         self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
@@ -226,13 +223,13 @@ class UI(QtWidgets.QMainWindow):
     #     self.materials.show()
 
     def OpenCustomerScreen(self):
-        self.vendor = CustomerClass.CustomerScreen()
-        self.vendor.show()
+        self.customer = CustomerClass.CustomerScreen()
+        self.customer.show()
 
     def OpenVendorScreen(self):
         self.vendor = VendorClass.VendorScreen()
         self.vendor.show()
-        
+
     def CheckPrivilege(self):
         username = self.username.text()
         password = self.password.text()
@@ -270,6 +267,7 @@ class UI(QtWidgets.QMainWindow):
 
         self.username.clear()
         self.password.clear()
+
 
 app = QApplication(sys.argv)
 loginScreen = UI()

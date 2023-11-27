@@ -38,7 +38,7 @@ class CustomerScreen(QtWidgets.QMainWindow):
         self.addCustomerButton.clicked.connect(self.AddCustomer)
         self.editCustomerButton.clicked.connect(self.EditCustomer)
         self.searchCustomerButton.clicked.connect(self.SearchCustomer)
-        self.deleteCustomerButton.clicked.connect(self.DeleteCustomer)
+        # self.deleteCustomerButton.clicked.connect(self.DeleteCustomer)
 
     def PopulateCustomerTable(self):
         cursor.execute("select * from Customer")
@@ -124,29 +124,29 @@ class CustomerScreen(QtWidgets.QMainWindow):
         self.editCustomer.customerUpdated.connect(self.PopulateCustomerTable)
         self.editCustomer.show()
 
-    def DeleteCustomer(self):
-        selected_items = self.customerTable.selectedItems()
+    # def DeleteCustomer(self):
+    #     selected_items = self.customerTable.selectedItems()
 
-        if not selected_items:
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setWindowTitle("Error")
-            self.msg.setText("Please select an entry to delete.")
-            self.msg.show()
-            return
+    #     if not selected_items:
+    #         self.msg = QtWidgets.QMessageBox()
+    #         self.msg.setWindowTitle("Error")
+    #         self.msg.setText("Please select an entry to delete.")
+    #         self.msg.show()
+    #         return
 
-        selected_row = selected_items[0].row()
-        customer_id = int(self.customerTable.item(selected_row, 0).text())
+    #     selected_row = selected_items[0].row()
+    #     customer_id = int(self.customerTable.item(selected_row, 0).text())
 
-        sql_query = "delete from Customer WHERE customerID = ?"
-        cursor.execute(sql_query, (customer_id))
-        connection.commit()
+    #     sql_query = "delete from Customer WHERE customerID = ?"
+    #     cursor.execute(sql_query, (customer_id))
+    #     connection.commit()
 
-        self.msg = QtWidgets.QMessageBox()
-        self.msg.setWindowTitle("Success")
-        self.msg.setText("Customer deleted successfully.")
-        self.msg.show()
+    #     self.msg = QtWidgets.QMessageBox()
+    #     self.msg.setWindowTitle("Success")
+    #     self.msg.setText("Customer deleted successfully.")
+    #     self.msg.show()
 
-        self.PopulateCustomerTable()  # Update the vendorTable after deletion
+    #     self.PopulateCustomerTable()  # Update the vendorTable after deletion
 
 
 
