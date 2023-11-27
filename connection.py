@@ -23,85 +23,6 @@ else:
 connection = pyodbc.connect(connection_string)
 cursor = connection.cursor()
 
-# ---------------------------------------------------------------------------------
-
-# VENDOR
-
-# ---------------------------------------------------------------------------------
-
-class EditVendorScreen(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(EditVendorScreen, self).__init__()
-        uic.loadUi("Screens/EditVendors.ui", self)
-
-class AddVendorMessageBox(QMessageBox):
-    def __init__(self, message, title):
-        super().__init__()
-
-        self.setIcon(QMessageBox.Icon.Information)
-        self.setText(message)
-        self.setWindowTitle(title)
-        self.addButton(QMessageBox.StandardButton.Close)
-
-class VendorScreen(QtWidgets.QMainWindow):   
-    def __init__(self):
-        # Call the inherited classes __init__ method
-        super(VendorScreen, self).__init__() 
-        
-        # Load the .ui file
-        uic.loadUi('Screens/Vendors.ui', self)
-
-        self.PopulateVendorTable()        
-
-        self.addVendorButton.clicked.connect(self.AddVendor)
-
-        self.editVendorButton.clicked.connect(self.EditVendor)
-
-
-    def PopulateVendorTable(self):
-        cursor.execute("SELECT * FROM Vendor")
-        self.vendorTable.setRowCount(0)
-
-        for row_index, row_data in enumerate(cursor.fetchall()):
-            self.vendorTable.insertRow(row_index)
-            for col_index, cell_data in enumerate(row_data):
-                item = QTableWidgetItem(str(cell_data))
-                self.vendorTable.setItem(row_index, col_index, item)
-
-    def AddVendor(self):
-        name = self.vendorNameBox.text()
-        contact = self.vendorContactNumber.text()
-        backupContact = self.vendorBackupContact.text()
-        email = self.vendorEmail.text()
-        address = self.vendorAddress.text()
-
-        if name == '' or contact == '' or backupContact == '' or email == '' or address == '':
-            self.notAddedMsg = AddVendorMessageBox("Please enter complete information to add vendor", "Failed")
-            self.notAddedMsg.show()
-        else:
-            sql_query = "insert into vendor values(?, ?, ?, ?, ?)"
-            cursor.execute(sql_query, (name, contact, backupContact, email, address))
-            connection.commit()
-
-            self.addMsg = AddVendorMessageBox("Vendor added successfully", "Success")
-            self.addMsg.show()
-    
-    def EditVendor(self):
-        self.editVendor = EditVendorScreen()
-        self.editVendor.show()
-
-# ---------------------------------------------------------------------------------
-
-# PURCHASE
-
-# ---------------------------------------------------------------------------------
-
-
-
-
-
-
-
 class UI(QtWidgets.QMainWindow):   
 
     def __init__(self):
@@ -110,20 +31,12 @@ class UI(QtWidgets.QMainWindow):
         
         uic.loadUi('Screens/UserAuthentication.ui', self)
 
-        self.vendorsButton.setEnabled(True)
-        self.vendorsButton.clicked.connect(self.OpenVendorScreen)
-
         self.purchaseButton.setEnabled(True)
         self.purchaseButton.clicked.connect(self.OpenPurchaseScreen)
-
-    def OpenVendorScreen(self):
-        self.vendor = VendorScreen()
-        self.vendor.show()
 
     def OpenPurchaseScreen(self):
         self.purchase = PurchaseScreen()
         self.purchase.show()
-        
 
 app = QApplication(sys.argv)
 loginScreen = UI()

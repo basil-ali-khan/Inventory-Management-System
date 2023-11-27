@@ -315,7 +315,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_14">
+    <widget class="QLineEdit" name="SearchMaterial_2">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -325,10 +325,10 @@
       </rect>
      </property>
      <property name="text">
-      <string> Search</string>
+      <string/>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_2">
+    <widget class="QComboBox" name="MaterialDropDown">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -348,7 +348,7 @@
       </property>
      </item>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="SearchMaterial">
      <property name="geometry">
       <rect>
        <x>250</x>
@@ -469,7 +469,7 @@
       </property>
      </column>
     </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="SearchVendor">
      <property name="geometry">
       <rect>
        <x>980</x>
@@ -482,7 +482,7 @@
       <string>Search</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="VendorDropDown">
      <property name="geometry">
       <rect>
        <x>740</x>
@@ -502,7 +502,7 @@
       </property>
      </item>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_6">
+    <widget class="QLineEdit" name="SearchVendor_2">
      <property name="geometry">
       <rect>
        <x>840</x>
@@ -512,7 +512,7 @@
       </rect>
      </property>
      <property name="text">
-      <string> Search</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLineEdit" name="VendorName">

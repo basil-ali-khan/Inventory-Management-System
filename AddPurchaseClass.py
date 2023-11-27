@@ -42,6 +42,9 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.AddMaterialVendor.clicked.connect(self.add_material)
         self.AddPurchase.clicked.connect(self.add_purchase)
         self.ClearPurchase.clicked.connect(self.clear)
+        self.SearchMaterial.clicked.connect(self.search_material)
+        self.SearchVendor.clicked.connect(self.search_vendor)
+        
 
     def PopulateMaterialTable(self):
 
@@ -175,3 +178,43 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorID.setText("")
         self.VendorName.setText("")
         self.PurchaseDate.setDate(QDate(2000, 1, 1))
+
+    def search_material(self):
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+
+        if self.MaterialDropDown.currentText() == 'Material ID':
+            search_text = int(self.SearchMaterial_2.text())
+            cursor.execute("SELECT * from Material where materialID = ?", (search_text,))
+
+        elif self.MaterialDropDown.currentText() == 'Material Name':
+            search_text = str(self.SearchMaterial_2.text())
+            cursor.execute("SELECT * from Material where materialName = ?", (search_text,))
+
+        self.materialTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.materialTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.materialTable.setItem(row_index, col_index, item)
+
+    def search_vendor(self):
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+
+        if self.VendorDropDown.currentText() == 'Vendor ID':
+            search_text = int(self.SearchVendor_2.text())
+            cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text,))
+
+        elif self.VendorDropDown.currentText() == 'Vendor Name':
+            search_text = str(self.SearchVendor_2.text())
+            cursor.execute("SELECT * from Vendor where vendorName = ?", (search_text,))
+
+        self.vendorTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.vendorTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.vendorTable.setItem(row_index, col_index, item)

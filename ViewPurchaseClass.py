@@ -41,5 +41,16 @@ class ViewPurchaseScreen(QtWidgets.QMainWindow):
         self.viewTotalAmount.setText(str(self.total_amount))
         self.viewTotalAmount.setDisabled(True)
 
-        self.viewVendorId.setText(str(self.vendor_id))
-        self.viewVendorId.setDisabled(True)
+        cursor.execute("SELECT vendorName from Vendor where vendorID = ?", (vendor_id,))
+        result = cursor.fetchone()
+        self.viewVendorName.setText(str(result))
+        self.viewVendorName.setDisabled(True)
+
+        cursor.execute("SELECT Material.materialName, PurchaseMaterial.quantity, PurchaseMaterial.cost FROM PurchaseMaterial JOIN Purchase ON PurchaseMaterial.purchaseID = Purchase.purchaseID JOIN Material ON PurchaseMaterial.materialID = Material.materialID WHERE PurchaseMaterial.purchaseID = ?", (purchase_id,))
+
+        self.ViewPurchaseTable.setRowCount(0)
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.ViewPurchaseTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.ViewPurchaseTable.setItem(row_index, col_index, item)
