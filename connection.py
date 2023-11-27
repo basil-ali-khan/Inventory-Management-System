@@ -9,6 +9,7 @@ import VendorClass
 import ProductsClass
 import MaterialClass
 import EditVendorClass
+import CustomerClass
 
 server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 database = 'Inventory_Management_System'  # Name of your Northwind database
@@ -54,9 +55,11 @@ class UI(QtWidgets.QMainWindow):
         self.vendorsButton.clicked.connect(self.OpenVendorScreen)
         self.productsButton.clicked.connect(self.OpenProductsScreen)
         self.materialButton.clicked.connect(self.OpenMaterialScreen)
+        self.customerButton.clicked.connect(self.OpenCustomerScreen)
+
 
     def OpenProductsScreen(self):
-        self.products = ProductsClass.Product()
+        self.products = ProductsClass.ProductScreen()
         self.products.show()
 
     def OpenMaterialScreen(self):
@@ -67,6 +70,10 @@ class UI(QtWidgets.QMainWindow):
     def OpenVendorScreen(self):
         self.vendor = VendorClass.VendorScreen()
         self.vendor.show()
+
+    def OpenCustomerScreen(self):
+        self.customer = CustomerClass.CustomerScreen()
+        self.customer.show()
         
     def CheckPrivilege(self):
         username = self.username.text()
