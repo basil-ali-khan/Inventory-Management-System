@@ -4,7 +4,7 @@ from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 import sys
 import pyodbc
-import EditVendorClass
+import EditCustomerClass
 
 server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 database = 'Inventory_Management_System'  # Name of your Northwind database
@@ -25,61 +25,60 @@ connection = pyodbc.connect(connection_string)
 # Create a cursor to interact with the database
 cursor = connection.cursor()
 
-
-
-class VendorScreen(QtWidgets.QMainWindow):   
+class CustomerScreen(QtWidgets.QMainWindow):   
     def __init__(self):
         # Call the inherited classes __init__ method
-        super(VendorScreen, self).__init__() 
+        super(CustomerScreen, self).__init__() 
         
         # Load the .ui file
-        uic.loadUi('Screens/Vendors.ui', self)
+        uic.loadUi('Screens/Customers.ui', self)
 
-        self.PopulateVendorTable()        
-        self.searchVendorValue.setPlaceholderText("Search")
-        self.addVendorButton.clicked.connect(self.AddVendor)
-        self.editVendorButton.clicked.connect(self.EditVendor)
-        self.searchVendorButton.clicked.connect(self.SearchVendor)
-        self.deleteVendorButton.clicked.connect(self.DeleteVendor)
+        self.PopulateCustomerTable()
+        self.searchCustomerValue.setPlaceholderText("Search")
+        self.addCustomerButton.clicked.connect(self.AddCustomer)
+        self.editCustomerButton.clicked.connect(self.EditCustomer)
+        self.searchCustomerButton.clicked.connect(self.SearchCustomer)
+        self.deleteCustomerButton.clicked.connect(self.DeleteCustomer)
 
-    def PopulateVendorTable(self):
-        cursor.execute("select * from vendor")
-        self.vendorTable.setRowCount(0)
+    def PopulateCustomerTable(self):
+        cursor.execute("select * from Customer")
+        self.customerTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
-            self.vendorTable.insertRow(row_index)
+            self.customerTable.insertRow(row_index)
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
-                self.vendorTable.setItem(row_index, col_index, item)
+                self.customerTable.setItem(row_index, col_index, item)
 
-    def AddVendor(self):
-        name = self.vendorNameBox.text()
-        contact = self.vendorContactNumber.text()
-        backupContact = self.vendorBackupContact.text()
-        email = self.vendorEmail.text()
-        address = self.vendorAddress.text()
+    def AddCustomer(self):
+        name = self.customerName.text()
+        gender = self.customerGender.currentText()
+        contact = self.customerContact.text()
+        backupContact = self.customerBackup.text()
+        email = self.customerEmail.text()
+        address = self.customerAddress.text()
         self.msg = QtWidgets.QMessageBox()
         if name == '' or contact == '' or backupContact == '' or email == '' or address == '':
             self.msg.setWindowTitle("Error")
             self.msg.setText("Please enter complete information.")
         else:
-            sql_query = "insert into vendor values(?, ?, ?, ?, ?)"
-            cursor.execute(sql_query, (name, contact, backupContact, email, address))
+            sql_query = "insert into Customer values(?, ?, ?, ?, ?, ?)"
+            cursor.execute(sql_query, (name, gender, contact, backupContact, email, address))
             connection.commit()
             self.msg.setWindowTitle("Success")
-            self.msg.setText("Vendor added successfully.")
-            self.PopulateVendorTable()
+            self.msg.setText("Customer added successfully.")
+            self.PopulateCustomerTable()
         self.msg.show()
-    
-    def SearchVendor(self):
-        criteria = self.searchVendorCriteria.currentText()
-        if criteria == "Vendor Name":
-            criteria = "vendorName"
+
+    def SearchCustomer(self):
+        criteria = self.searchCustomerCriteria.currentText()
+        if criteria == "Customer Name":
+            criteria = "customerName"
         elif criteria == "Contact Number":
             criteria = "contactNumber"
         elif criteria == "Email":
             criteria = "email"
-        value = self.searchVendorValue.text()
+        value = self.searchCustomerValue.text()
         if not value:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle("Error")
@@ -87,7 +86,7 @@ class VendorScreen(QtWidgets.QMainWindow):
             self.msg.show()
             return
 
-        sql_query = f"select * from vendor where {criteria} like ?"
+        sql_query = f"select * from Customer where {criteria} like ?"
         cursor.execute(sql_query, ('%' + value + '%',))
 
         rows = cursor.fetchall()
@@ -97,44 +96,19 @@ class VendorScreen(QtWidgets.QMainWindow):
             self.msg.setWindowTitle("No Results")
             self.msg.setText("No results found for the given search criteria.")
             self.msg.show()
-            self.PopulateVendorTable()
+            self.PopulateCustomerTable()
             return
 
-        self.vendorTable.setRowCount(0)
+        self.customerTable.setRowCount(0)
 
         for row_index, row_data in enumerate(rows):
-            self.vendorTable.insertRow(row_index)
+            self.customerTable.insertRow(row_index)
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
-                self.vendorTable.setItem(row_index, col_index, item)
+                self.customerTable.setItem(row_index, col_index, item)
 
-    def DeleteVendor(self):
-        selected_items = self.vendorTable.selectedItems()
-
-        if not selected_items:
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setWindowTitle("Error")
-            self.msg.setText("Please select an entry to delete.")
-            self.msg.show()
-            return
-
-        # Assuming the first column contains a unique identifier (e.g., vendor_id)
-        selected_row = selected_items[0].row()
-        vendor_id = int(self.vendorTable.item(selected_row, 0).text())
-
-        sql_query = "delete from vendor WHERE vendorID = ?"
-        cursor.execute(sql_query, (vendor_id))
-        connection.commit()
-
-        self.msg = QtWidgets.QMessageBox()
-        self.msg.setWindowTitle("Success")
-        self.msg.setText("Vendor deleted successfully.")
-        self.msg.show()
-
-        self.PopulateVendorTable()  # Update the vendorTable after deletion
-
-    def EditVendor(self):
-        selected_items = self.vendorTable.selectedItems()
+    def EditCustomer(self):
+        selected_items = self.customerTable.selectedItems()
 
         if not selected_items:
             self.msg = QtWidgets.QMessageBox()
@@ -144,8 +118,35 @@ class VendorScreen(QtWidgets.QMainWindow):
             return
 
         selected_row = selected_items[0].row()
-        vendor_data = [self.vendorTable.item(selected_row, col_index).text() for col_index in range(self.vendorTable.columnCount())]
+        customer_data = [self.customerTable.item(selected_row, col_index).text() for col_index in range(self.customerTable.columnCount())]
 
-        self.editVendor = EditVendorClass.EditVendorScreen(vendor_data)
-        self.editVendor.vendorUpdated.connect(self.PopulateVendorTable)
-        self.editVendor.show()
+        self.editCustomer = EditCustomerClass.EditCustomerScreen(customer_data)
+        self.editCustomer.customerUpdated.connect(self.PopulateCustomerTable)
+        self.editCustomer.show()
+
+    def DeleteCustomer(self):
+        selected_items = self.customerTable.selectedItems()
+
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to delete.")
+            self.msg.show()
+            return
+
+        selected_row = selected_items[0].row()
+        customer_id = int(self.customerTable.item(selected_row, 0).text())
+
+        sql_query = "delete from Customer WHERE customerID = ?"
+        cursor.execute(sql_query, (customer_id))
+        connection.commit()
+
+        self.msg = QtWidgets.QMessageBox()
+        self.msg.setWindowTitle("Success")
+        self.msg.setText("Customer deleted successfully.")
+        self.msg.show()
+
+        self.PopulateCustomerTable()  # Update the vendorTable after deletion
+
+
+

@@ -25,26 +25,29 @@ connection = pyodbc.connect(connection_string)
 # Create a cursor to interact with the database
 cursor = connection.cursor()
 
-class EditVendorScreen(QtWidgets.QMainWindow):
-    vendorUpdated = QtCore.pyqtSignal()
-    def __init__(self, vendor_data):
-        super(EditVendorScreen, self).__init__()
-        uic.loadUi('Screens/EditVendors.ui', self)
+class EditCustomerScreen(QtWidgets.QMainWindow):
+    customerUpdated = QtCore.pyqtSignal()
+    def __init__(self, customer_data):
+        super(EditCustomerScreen, self).__init__()
+        uic.loadUi('Screens/EditCustomer.ui', self)
 
         # Assuming your UI file has QLineEdit widgets named vendorNameEdit, contactNumberEdit, emailEdit, addressEdit
-        self.nameText.setText(vendor_data[1])
-        self.contactText.setText(vendor_data[2])
-        self.backupText.setText(vendor_data[3])
-        self.emailText.setText(vendor_data[4])
-        self.addressText.setText(vendor_data[5])
+        self.nameText.setText(customer_data[1])
+        self.contactText.setText(customer_data[3])
+        self.backupText.setText(customer_data[4])
+        self.emailText.setText(customer_data[5])
+        self.addressText.setText(customer_data[6])
+        gender_index = self.genderComboBox.findText(customer_data[2])
+        if gender_index != -1:
+            self.genderComboBox.setCurrentIndex(gender_index)
 
-        # Save vendor_data as an instance variable
-        self.vendor_data = vendor_data
+        # Save customer_data as an instance variable
+        self.customer_data = customer_data
 
-        self.resetButton.clicked.connect(self.ResetEntries)
+        self.clearButton.clicked.connect(self.ClearEntries)
         self.saveButton.clicked.connect(self.SaveChanges)
 
-    def ResetEntries(self):
+    def ClearEntries(self):
         # Reset the text of the QLineEdit widgets to an empty string
         self.nameText.clear()
         self.contactText.clear()
@@ -55,13 +58,14 @@ class EditVendorScreen(QtWidgets.QMainWindow):
     def SaveChanges(self):
         # Get the updated information from the QLineEdit widgets
         updated_name = self.nameText.text()
+        updated_gender = self.genderComboBox.currentText()
         updated_contact = self.contactText.text()
         updated_backup = self.backupText.text()
         updated_email = self.emailText.text()
         updated_address = self.addressText.text()
 
         # Assuming vendor_id is the first element in vendor_data
-        vendor_id = self.vendor_data[0]
+        customer_id = self.customer_data[0]
 
         self.msg = QtWidgets.QMessageBox()
         if updated_name == '' or updated_contact == '' or updated_backup == '' or updated_email == '' or updated_address == '':
@@ -70,16 +74,16 @@ class EditVendorScreen(QtWidgets.QMainWindow):
             self.msg.show()
         else:
         # Run SQL query to update records in the database
-            update_query = "UPDATE Vendor SET vendorName=?, contactNumber=?, backupContact=?, email=?, address=? WHERE vendorID=?"
-            cursor.execute(update_query, (updated_name, updated_contact, updated_backup, updated_email, updated_address, vendor_id))
+            update_query = "UPDATE Customer SET customerName=?, gender=?, contactNumber=?, backupContact=?, email=?, address=? WHERE customerID=?"
+            cursor.execute(update_query, (updated_name, updated_gender ,updated_contact, updated_backup, updated_email, updated_address, customer_id))
             connection.commit()
 
             # Optionally, show a success message
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle("Success")
-            self.msg.setText("Vendor information updated successfully.")
+            self.msg.setText("Customer information updated successfully.")
             self.msg.show()
 
             # Emit the signal indicating that the vendor has been updated
-            self.vendorUpdated.emit()
+            self.customerUpdated.emit()
 
