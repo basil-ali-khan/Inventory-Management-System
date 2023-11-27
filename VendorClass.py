@@ -45,20 +45,20 @@ connection = pyodbc.connect(connection_string)
 cursor = connection.cursor()
 
 
-class VendorScreen(QtWidgets.QMainWindow):   
+class VendorScreen(QtWidgets.QMainWindow):
     def __init__(self):
         # Call the inherited classes __init__ method
-        super(VendorScreen, self).__init__() 
-        
+        super(VendorScreen, self).__init__()
+
         # Load the .ui file
         uic.loadUi('Screens/Vendors.ui', self)
 
-        self.PopulateVendorTable()        
+        self.PopulateVendorTable()
         self.searchVendorValue.setPlaceholderText("Search")
         self.addVendorButton.clicked.connect(self.AddVendor)
         self.editVendorButton.clicked.connect(self.EditVendor)
         self.searchVendorButton.clicked.connect(self.SearchVendor)
-        self.deleteVendorButton.clicked.connect(self.DeleteVendor)
+        # self.deleteVendorButton.clicked.connect(self.DeleteVendor)
 
     def PopulateVendorTable(self):
         cursor.execute("select * from vendor")
@@ -82,13 +82,14 @@ class VendorScreen(QtWidgets.QMainWindow):
             self.msg.setText("Please enter complete information.")
         else:
             sql_query = "insert into vendor values(?, ?, ?, ?, ?)"
-            cursor.execute(sql_query, (name, contact, backupContact, email, address))
+            cursor.execute(sql_query, (name, contact,
+                           backupContact, email, address))
             connection.commit()
             self.msg.setWindowTitle("Success")
             self.msg.setText("Vendor added successfully.")
             self.PopulateVendorTable()
         self.msg.show()
-    
+
     def SearchVendor(self):
         criteria = self.searchVendorCriteria.currentText()
         if criteria == "Vendor Name":
@@ -126,30 +127,30 @@ class VendorScreen(QtWidgets.QMainWindow):
                 item = QTableWidgetItem(str(cell_data))
                 self.vendorTable.setItem(row_index, col_index, item)
 
-    def DeleteVendor(self):
-        selected_items = self.vendorTable.selectedItems()
+    # def DeleteVendor(self):
+    #     selected_items = self.vendorTable.selectedItems()
 
-        if not selected_items:
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setWindowTitle("Error")
-            self.msg.setText("Please select an entry to delete.")
-            self.msg.show()
-            return
+    #     if not selected_items:
+    #         self.msg = QtWidgets.QMessageBox()
+    #         self.msg.setWindowTitle("Error")
+    #         self.msg.setText("Please select an entry to delete.")
+    #         self.msg.show()
+    #         return
 
-        # Assuming the first column contains a unique identifier (e.g., vendor_id)
-        selected_row = selected_items[0].row()
-        vendor_id = int(self.vendorTable.item(selected_row, 0).text())
+    #     # Assuming the first column contains a unique identifier (e.g., vendor_id)
+    #     selected_row = selected_items[0].row()
+    #     vendor_id = int(self.vendorTable.item(selected_row, 0).text())
 
-        sql_query = "delete from vendor WHERE vendorID = ?"
-        cursor.execute(sql_query, (vendor_id))
-        connection.commit()
+    #     sql_query = "delete from vendor WHERE vendorID = ?"
+    #     cursor.execute(sql_query, (vendor_id))
+    #     connection.commit()
 
-        self.msg = QtWidgets.QMessageBox()
-        self.msg.setWindowTitle("Success")
-        self.msg.setText("Vendor deleted successfully.")
-        self.msg.show()
+    #     self.msg = QtWidgets.QMessageBox()
+    #     self.msg.setWindowTitle("Success")
+    #     self.msg.setText("Vendor deleted successfully.")
+    #     self.msg.show()
 
-        self.PopulateVendorTable()  # Update the vendorTable after deletion
+    #     self.PopulateVendorTable()  # Update the vendorTable after deletion
 
     def EditVendor(self):
         selected_items = self.vendorTable.selectedItems()
@@ -162,7 +163,8 @@ class VendorScreen(QtWidgets.QMainWindow):
             return
 
         selected_row = selected_items[0].row()
-        vendor_data = [self.vendorTable.item(selected_row, col_index).text() for col_index in range(self.vendorTable.columnCount())]
+        vendor_data = [self.vendorTable.item(selected_row, col_index).text(
+        ) for col_index in range(self.vendorTable.columnCount())]
 
         self.editVendor = EditVendorClass.EditVendorScreen(vendor_data)
         self.editVendor.vendorUpdated.connect(self.PopulateVendorTable)
