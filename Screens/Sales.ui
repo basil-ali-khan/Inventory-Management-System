@@ -145,7 +145,7 @@
     </column>
     <column>
      <property name="text">
-      <string>Customer Name</string>
+      <string>Sale Date</string>
      </property>
     </column>
     <column>
@@ -155,17 +155,17 @@
     </column>
     <column>
      <property name="text">
-      <string>Sale Date</string>
+      <string>User ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Customer ID</string>
      </property>
     </column>
     <column>
      <property name="text">
       <string>Total Amount</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Customer Contact</string>
      </property>
     </column>
    </widget>
@@ -179,7 +179,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Edit</string>
+     <string>Delete</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -228,6 +228,29 @@
      </property>
      <property name="text">
       <string>Date:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_4">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>50</y>
+       <width>113</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>30</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>User ID</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_6">
@@ -285,7 +308,7 @@
     <widget class="QLineEdit" name="lineEdit_5">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>290</x>
        <y>50</y>
        <width>113</width>
        <height>31</height>
@@ -298,14 +321,73 @@
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>290</x>
        <y>30</y>
-       <width>111</width>
-       <height>20</height>
+       <width>81</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Customer Name</string>
+      <string>Customer ID</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>130</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>To:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>160</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>From:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>100</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Time:</string>
+     </property>
+    </widget>
+    <widget class="QTimeEdit" name="timeEdit">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>130</y>
+       <width>118</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTimeEdit" name="timeEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>160</y>
+       <width>118</width>
+       <height>22</height>
+      </rect>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_2">
@@ -345,32 +427,6 @@
      </property>
      <property name="text">
       <string/>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_7">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>50</y>
-       <width>113</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_9">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>30</y>
-       <width>111</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Customer Contact</string>
      </property>
     </widget>
    </widget>

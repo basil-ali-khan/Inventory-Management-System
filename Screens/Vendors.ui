@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1202</width>
-    <height>526</height>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -175,7 +175,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>  Search Vendors</string>
+     <string/>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -208,7 +208,7 @@
     <property name="geometry">
      <rect>
       <x>820</x>
-      <y>150</y>
+      <y>90</y>
       <width>341</width>
       <height>301</height>
      </rect>
@@ -374,8 +374,8 @@
    <widget class="QPushButton" name="editVendorButton">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>90</y>
+      <x>850</x>
+      <y>410</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -389,6 +389,26 @@
     </property>
     <property name="text">
      <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteVendorButton">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>410</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete</string>
     </property>
    </widget>
    <widget class="QPushButton" name="searchVendorButton">
@@ -418,7 +438,7 @@
      <x>0</x>
      <y>0</y>
      <width>1202</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

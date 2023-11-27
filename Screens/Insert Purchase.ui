@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>301</width>
+      <width>221</width>
       <height>51</height>
      </rect>
     </property>
@@ -96,9 +96,9 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>60</y>
+       <y>80</y>
        <width>301</width>
-       <height>221</height>
+       <height>211</height>
       </rect>
      </property>
      <row>
@@ -178,12 +178,12 @@
      </row>
      <column>
       <property name="text">
-       <string>Material Name</string>
+       <string>Material ID</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Description</string>
+       <string>Material Name</string>
       </property>
      </column>
     </widget>
@@ -191,7 +191,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>60</y>
+       <y>40</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -204,7 +204,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>100</y>
+       <y>80</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -217,7 +217,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>60</y>
+       <y>40</y>
        <width>113</width>
        <height>31</height>
       </rect>
@@ -233,7 +233,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>100</y>
+       <y>80</y>
        <width>113</width>
        <height>31</height>
       </rect>
@@ -249,7 +249,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>140</y>
+       <y>120</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -262,7 +262,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>180</y>
+       <y>160</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -275,7 +275,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>140</y>
+       <y>120</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -291,7 +291,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>220</y>
+       <y>200</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -304,9 +304,9 @@
      <property name="geometry">
       <rect>
        <x>400</x>
-       <y>260</y>
-       <width>131</width>
-       <height>31</height>
+       <y>240</y>
+       <width>141</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -317,7 +317,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>180</y>
+       <y>160</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -333,7 +333,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>220</y>
+       <y>200</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -349,7 +349,7 @@
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>20</y>
+       <y>30</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -362,11 +362,16 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>30</y>
        <width>91</width>
        <height>31</height>
       </rect>
      </property>
+     <item>
+      <property name="text">
+       <string>Material ID</string>
+      </property>
+     </item>
      <item>
       <property name="text">
        <string>Material Name</string>
@@ -377,19 +382,6 @@
        <string>Description</string>
       </property>
      </item>
-    </widget>
-    <widget class="QPushButton" name="pushButton_5">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>20</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Search</string>
-     </property>
     </widget>
    </widget>
    <widget class="QLabel" name="label_9">
@@ -454,7 +446,7 @@
      <property name="geometry">
       <rect>
        <x>330</x>
-       <y>60</y>
+       <y>40</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -467,7 +459,7 @@
      <property name="geometry">
       <rect>
        <x>330</x>
-       <y>100</y>
+       <y>80</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -480,7 +472,7 @@
      <property name="geometry">
       <rect>
        <x>330</x>
-       <y>180</y>
+       <y>160</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -575,17 +567,12 @@
      </row>
      <column>
       <property name="text">
+       <string>Vendor ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>Vendor Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Contact Number</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Email</string>
       </property>
      </column>
     </widget>
@@ -606,7 +593,7 @@
      <property name="geometry">
       <rect>
        <x>330</x>
-       <y>140</y>
+       <y>120</y>
        <width>141</width>
        <height>20</height>
       </rect>
@@ -619,7 +606,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>220</y>
+       <y>190</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -635,7 +622,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>60</y>
+       <y>30</y>
        <width>113</width>
        <height>31</height>
       </rect>
@@ -651,7 +638,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>140</y>
+       <y>110</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -667,7 +654,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>100</y>
+       <y>70</y>
        <width>113</width>
        <height>31</height>
       </rect>
@@ -683,7 +670,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>180</y>
+       <y>150</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -699,9 +686,9 @@
      <property name="geometry">
       <rect>
        <x>400</x>
-       <y>260</y>
-       <width>121</width>
-       <height>31</height>
+       <y>240</y>
+       <width>141</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -719,6 +706,11 @@
      </property>
      <item>
       <property name="text">
+       <string>Vendor ID</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Vendor Name</string>
       </property>
      </item>
@@ -729,7 +721,17 @@
      </item>
      <item>
       <property name="text">
+       <string>Backup Contact</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Email</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Address</string>
       </property>
      </item>
     </widget>
@@ -737,26 +739,13 @@
      <property name="geometry">
       <rect>
        <x>330</x>
-       <y>220</y>
+       <y>195</y>
        <width>101</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
       <string>Address</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_6">
-     <property name="geometry">
-      <rect>
-       <x>320</x>
-       <y>30</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Search</string>
      </property>
     </widget>
    </widget>
@@ -788,12 +777,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Vendor Name</string>
+       <string>Vendor ID</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Material Name</string>
+       <string>Material ID</string>
       </property>
      </column>
      <column>
@@ -815,7 +804,7 @@
      <x>0</x>
      <y>0</y>
      <width>1254</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
