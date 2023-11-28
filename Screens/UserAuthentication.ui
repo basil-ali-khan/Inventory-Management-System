@@ -204,7 +204,7 @@
      </font>
     </property>
     <property name="text">
-     <string>LOGIN</string>
+     <string>LOG IN</string>
     </property>
    </widget>
    <widget class="QPushButton" name="customerButton">
@@ -342,6 +342,25 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="QPushButton" name="logoutButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>320</y>
+      <width>281</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>LOG OUT</string>
+    </property>
+   </widget>
    <zorder>graphicsView</zorder>
    <zorder>label</zorder>
    <zorder>label_5</zorder>
@@ -359,6 +378,7 @@
    <zorder>line_4</zorder>
    <zorder>vendorsButton</zorder>
    <zorder>line_3</zorder>
+   <zorder>logoutButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -366,7 +386,7 @@
      <x>0</x>
      <y>0</y>
      <width>1099</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
