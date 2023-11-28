@@ -207,10 +207,16 @@ class UI(QtWidgets.QMainWindow):
         self.salesButton.setEnabled(False)
         self.materialButton.setEnabled(False)
         self.purchaseButton.setEnabled(False)
+        self.logoutButton.setEnabled(False)
 
         self.loginButton.clicked.connect(self.CheckPrivilege)
         self.vendorsButton.clicked.connect(self.OpenVendorScreen)
         self.customerButton.clicked.connect(self.OpenCustomerScreen)
+        self.logoutButton.clicked.connect(self.Logout)
+
+        self.logged_in = False
+
+
         # self.productsButton.clicked.connect(self.OpenProductsScreen)
         # self.materialButton.clicked.connect(self.OpenMaterialScreen)
 
@@ -252,6 +258,10 @@ class UI(QtWidgets.QMainWindow):
                 self.salesButton.setEnabled(True)
                 self.materialButton.setEnabled(False)
                 self.purchaseButton.setEnabled(False)
+            self.logged_in = True
+            self.logoutButton.setEnabled(True)
+            self.loginButton.setEnabled(False)
+            
         else:
             self.addMsg = QtWidgets.QMessageBox()
             self.addMsg.setWindowTitle('Error')
@@ -267,6 +277,21 @@ class UI(QtWidgets.QMainWindow):
 
         self.username.clear()
         self.password.clear()
+        self.setFocus(QtCore.Qt.FocusReason.OtherFocusReason)  # Clear focus
+
+
+    def Logout(self):
+        self.vendorsButton.setEnabled(False)
+        self.customerButton.setEnabled(False)
+        self.productsButton.setEnabled(False)
+        self.salesButton.setEnabled(False)
+        self.materialButton.setEnabled(False)
+        self.purchaseButton.setEnabled(False)
+        self.logoutButton.setEnabled(False)
+        self.logged_in = False
+        self.logoutButton.setEnabled(False)
+        self.loginButton.setEnabled(True)
+        self.setFocus(QtCore.Qt.FocusReason.OtherFocusReason)  # Clear focus
 
 
 app = QApplication(sys.argv)
