@@ -34,7 +34,7 @@
      <string>Materials</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="materialTable">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -118,20 +118,15 @@
      </property>
     </column>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="searchMaterialCriteria">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>131</width>
+      <width>110</width>
       <height>41</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Material ID</string>
-     </property>
-    </item>
     <item>
      <property name="text">
       <string>Material Name</string>
@@ -148,25 +143,28 @@
      </property>
     </item>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="searchMaterialValue">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>140</x>
       <y>70</y>
-      <width>311</width>
+      <width>240</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>  Search</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Search</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="editMaterialButton">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>640</x>
       <y>70</y>
-      <width>131</width>
+      <width>110</width>
       <height>41</height>
      </rect>
     </property>
@@ -186,24 +184,11 @@
     <property name="title">
      <string>Add Material</string>
     </property>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>60</y>
-       <width>81</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Materal ID</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>110</y>
+       <y>70</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -212,43 +197,11 @@
       <string>Material Name</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_4">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>60</y>
-       <width>271</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_5">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>110</y>
-       <width>271</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>160</y>
+       <y>130</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -257,11 +210,11 @@
       <string>Units</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
+    <widget class="QLineEdit" name="unitsBox">
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>160</y>
+       <y>130</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -273,7 +226,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="addMaterialButton">
      <property name="geometry">
       <rect>
        <x>610</x>
@@ -286,27 +239,11 @@
       <string>Add</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_6">
-     <property name="geometry">
-      <rect>
-       <x>440</x>
-       <y>60</y>
-       <width>281</width>
-       <height>131</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>440</x>
-       <y>30</y>
+       <x>460</x>
+       <y>40</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -315,7 +252,7 @@
       <string>Description</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="clearMaterialButton">
      <property name="geometry">
       <rect>
        <x>490</x>
@@ -328,19 +265,32 @@
       <string>Clear</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QPushButton" name="pushButton_5">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>70</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Delete</string>
-    </property>
+    <widget class="QTextEdit" name="materialDescBox">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>70</y>
+       <width>261</width>
+       <height>87</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="materialNameBox">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>70</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="Line" name="line">
     <property name="geometry">
@@ -368,6 +318,32 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
+   <widget class="QPushButton" name="searchMaterialButton">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>70</y>
+      <width>110</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Search</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="refreshButton">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>70</y>
+      <width>120</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Refresh</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -375,7 +351,7 @@
      <x>0</x>
      <y>0</y>
      <width>771</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

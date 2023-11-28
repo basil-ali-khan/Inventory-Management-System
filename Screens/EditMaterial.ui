@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>100</y>
+      <y>90</y>
       <width>431</width>
-      <height>381</height>
+      <height>391</height>
      </rect>
     </property>
     <property name="title">
@@ -30,7 +30,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>30</y>
+       <y>70</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -39,11 +39,11 @@
       <string>Material Name</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_5">
+    <widget class="QLineEdit" name="materialNameBox">
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>30</y>
+       <y>70</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -59,7 +59,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>80</y>
+       <y>120</y>
        <width>111</width>
        <height>21</height>
       </rect>
@@ -68,11 +68,11 @@
       <string>Units</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_7">
+    <widget class="QLineEdit" name="unitsBox">
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>80</y>
+       <y>120</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -84,7 +84,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="doneButton">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -101,7 +101,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>130</y>
+       <y>170</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -110,7 +110,7 @@
       <string>Description</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="cancelButton">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -120,25 +120,51 @@
       </rect>
      </property>
      <property name="text">
-      <string>Clear</string>
+      <string>Cancel</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_6">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>260</y>
-      <width>391</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
+    <widget class="QTextEdit" name="materialDescBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>190</y>
+       <width>391</width>
+       <height>131</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="materialIdBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>20</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Material ID</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -207,7 +233,7 @@
      <x>0</x>
      <y>0</y>
      <width>468</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
