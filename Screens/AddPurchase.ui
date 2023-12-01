@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1085</width>
-    <height>734</height>
+    <height>769</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@
     <property name="geometry">
      <rect>
       <x>850</x>
-      <y>460</y>
+      <y>490</y>
       <width>161</width>
       <height>41</height>
      </rect>
@@ -86,13 +86,13 @@
       <x>10</x>
       <y>80</y>
       <width>1051</width>
-      <height>301</height>
+      <height>351</height>
      </rect>
     </property>
     <property name="title">
      <string>Material/Vendor Info</string>
     </property>
-    <widget class="QTableWidget" name="materialTable">
+    <widget class="QTableWidget" name="MaterialTable">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -315,7 +315,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_14">
+    <widget class="QLineEdit" name="SearchMaterial_2">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -325,10 +325,10 @@
       </rect>
      </property>
      <property name="text">
-      <string> Search</string>
+      <string/>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_2">
+    <widget class="QComboBox" name="MaterialDropDown">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -348,7 +348,7 @@
       </property>
      </item>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="SearchMaterial">
      <property name="geometry">
       <rect>
        <x>250</x>
@@ -469,7 +469,7 @@
       </property>
      </column>
     </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="SearchVendor">
      <property name="geometry">
       <rect>
        <x>980</x>
@@ -482,7 +482,7 @@
       <string>Search</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="VendorDropDown">
      <property name="geometry">
       <rect>
        <x>740</x>
@@ -502,7 +502,7 @@
       </property>
      </item>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_6">
+    <widget class="QLineEdit" name="SearchVendor_2">
      <property name="geometry">
       <rect>
        <x>840</x>
@@ -512,7 +512,7 @@
       </rect>
      </property>
      <property name="text">
-      <string> Search</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLineEdit" name="VendorName">
@@ -579,12 +579,64 @@
       <string>Vendor Name</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="addMaterialButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>300</y>
+       <width>141</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Material</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="addVendorButton">
+     <property name="geometry">
+      <rect>
+       <x>740</x>
+       <y>300</y>
+       <width>140</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Vendor</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="refreshMaterialButton">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>300</y>
+       <width>141</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refresh Materials</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="refreshVendorButton">
+     <property name="geometry">
+      <rect>
+       <x>900</x>
+       <y>300</y>
+       <width>141</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refresh Vendors</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
       <x>880</x>
-      <y>430</y>
+      <y>460</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -630,7 +682,7 @@
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>400</y>
+      <y>440</y>
       <width>781</width>
       <height>271</height>
      </rect>

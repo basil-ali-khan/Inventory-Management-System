@@ -62,14 +62,19 @@ class MaterialScreen(QtWidgets.QMainWindow):
             self.msg.setWindowTitle('Error')
             self.msg.setText('Please enter complete info')
         else:
-            sql_query = f"insert into Material values(?, ?, ?)"
-            cursor.execute(sql_query, (name, desc, units))
-            connection.commit()
+            if not units.isdigit():
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('Units should be a numeric value')
+                self.msg.show()
+            else:
+                sql_query = f"insert into Material values(?, ?, ?)"
+                cursor.execute(sql_query, (name, desc, units))
+                connection.commit()
 
-            self.msg.setWindowTitle('Success')
-            self.msg.setText('Material added successfully')
+                self.msg.setWindowTitle('Success')
+                self.msg.setText('Material added successfully')
 
-            self.PopulateMaterialTable()
+                self.PopulateMaterialTable()
         
         self.msg.show()
     
@@ -109,37 +114,56 @@ class MaterialScreen(QtWidgets.QMainWindow):
                 sql_query = 'select * from Material where materialName like (?)'
                 cursor.execute(sql_query, ('%' + criteriaValue + '%',))
                 #connection.commit()
+                self.materialTable.clearContents()
+                self.materialTable.setRowCount(0)
+
+                for row_index, row_data in enumerate(cursor.fetchall()):
+                    print('populating row')
+                    self.materialTable.insertRow(row_index)
+                    for col_index, cell_data in enumerate(row_data):
+                        item = QTableWidgetItem(str(cell_data))
+                        print('Adding item to material table.')
+                        self.materialTable.setItem(row_index, col_index, item)
+
             elif criteria == 'Description':
                 sql_query = 'select * from Material where description like (?)'
                 cursor.execute(sql_query, ('%' + criteriaValue + '%',))
                 #connection.commit()     
+                self.materialTable.clearContents()
+                self.materialTable.setRowCount(0)
+
+                for row_index, row_data in enumerate(cursor.fetchall()):
+                    print('populating row')
+                    self.materialTable.insertRow(row_index)
+                    for col_index, cell_data in enumerate(row_data):
+                        item = QTableWidgetItem(str(cell_data))
+                        print('Adding item to material table.')
+                        self.materialTable.setItem(row_index, col_index, item)
+
             elif criteria == 'Units':
-                sql_query = 'select * from Material where units = (?)'
-                cursor.execute(sql_query, (criteriaValue,))
-                #connection.commit()
-            # connection.commit()
-            
+                if criteriaValue.isdigit():
+                    sql_query = 'select * from Material where units = (?)'
+                    cursor.execute(sql_query, (criteriaValue,))
+
+                    self.materialTable.clearContents()
+                    self.materialTable.setRowCount(0)
+
+                    for row_index, row_data in enumerate(cursor.fetchall()):
+                        print('populating row')
+                        self.materialTable.insertRow(row_index)
+                        for col_index, cell_data in enumerate(row_data):
+                            item = QTableWidgetItem(str(cell_data))
+                            print('Adding item to material table.')
+                            self.materialTable.setItem(row_index, col_index, item)
+
+                else:
+                    self.msg = QtWidgets.QMessageBox()
+                    self.msg.setWindowTitle('Error')
+                    self.msg.setText('Units should be a numeric value')
+                    self.msg.show()            
 
             print('Query executed')
-
-            self.materialTable.clearContents()
-            self.materialTable.setRowCount(0)
-
-            # for row_index, row_data in enumerate(cursor.fetchall()):
-            #     print('populating row')
-            #     self.materialTable.insertRow(row_index)
-            #     for col_index, cell_data in enumerate(row_data):
-            #         item = QTableWidgetItem(str(cell_data))
-            #         print('Adding item to material table.')
-            #         self.materialTable.setItem(row_index, col_index, item)
-            for row_index, row_data in enumerate(cursor.fetchall()):
-                print('populating row')
-                self.materialTable.insertRow(row_index)
-                for col_index, cell_data in enumerate(row_data):
-                    item = QTableWidgetItem(str(cell_data))
-                    print('Adding item to material table.')
-                    self.materialTable.setItem(row_index, col_index, item)
-
+            
         else:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle('Error')

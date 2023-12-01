@@ -169,7 +169,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Edit</string>
+     <string>View and Edit</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">

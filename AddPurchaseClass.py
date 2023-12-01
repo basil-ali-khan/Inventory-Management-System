@@ -5,24 +5,16 @@ from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 import sys
 import pyodbc
-# import VendorScreen, PurchaseClass
-# from PurchaseClass import PurchaseScreen
 
-# server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+from MaterialClass import MaterialScreen
+from VendorClass import VendorScreen
+
+# # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 # server = 'LAPTOP-MNMD5RBU'
 # database = 'Inventory_Management_System_Script'  # Name of your Northwind database
 # use_windows_authentication = True  # Set to True to use Windows Authentication
 # username = 'your_username'  # Specify a username if not using Windows Authentication
 # password = 'your_password'  # Specify a password if not using Windows Authentication
-
-# if use_windows_authentication:
-#     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-# else:
-#     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-
-# connection = pyodbc.connect(connection_string)
-# cursor = connection.cursor()
-
 server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 database = 'Inventory_Management_System'  # Name of your Northwind database
 use_windows_authentication = True  # Set to True to use Windows Authentication
@@ -32,17 +24,10 @@ password = 'Sirmehdi69'  # Specify a password if not using Windows Authenticatio
 if use_windows_authentication:
     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
 else:
-    connection_string = (
-        'DRIVER={ODBC Driver 18 for SQL Server};SERVER=localhost;DATABASE=Inventory_Management_System;UID=sa;PWD=Sirmehdi69;TrustServerCertificate=yes;Connection Timeout=30;'
-    )
+    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
 
-# Establish a connection to the database
 connection = pyodbc.connect(connection_string)
-
-# Create a cursor to interact with the database
 cursor = connection.cursor()
-
-
 
 class AddPurchaseScreen(QtWidgets.QMainWindow):
     def __init__(self):
@@ -52,7 +37,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.PopulateMaterialTable()
         self.PopulateVendorTable()
 
-        self.materialTable.itemSelectionChanged.connect(self.get_selected_material_data)
+        self.MaterialTable.itemSelectionChanged.connect(self.get_selected_material_data)
         self.vendorTable.itemSelectionChanged.connect(self.get_selected_vendor_data)
 
         self.MaterialID.setDisabled(True)
@@ -63,17 +48,32 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.AddMaterialVendor.clicked.connect(self.add_material)
         self.AddPurchase.clicked.connect(self.add_purchase)
         self.ClearPurchase.clicked.connect(self.clear)
+        self.SearchMaterial.clicked.connect(self.search_material)
+        self.SearchVendor.clicked.connect(self.search_vendor)
+        self.addMaterialButton.clicked.connect(self.add_new_material)
+        self.addVendorButton.clicked.connect(self.add_vendor)
+        self.refreshMaterialButton.clicked.connect(self.PopulateMaterialTable)
+        self.refreshVendorButton.clicked.connect(self.PopulateVendorTable)
+
+
+    def add_new_material(self):
+        self.addMaterialScreen = MaterialScreen()
+        self.addMaterialScreen.show()
+    
+    def add_vendor(self):
+        self.addVendorScreen = VendorScreen()
+        self.addVendorScreen.show()
 
     def PopulateMaterialTable(self):
 
         cursor.execute("SELECT * FROM Material")
-        self.materialTable.setRowCount(0)
+        self.MaterialTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
-            self.materialTable.insertRow(row_index)
+            self.MaterialTable.insertRow(row_index)
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
-                self.materialTable.setItem(row_index, col_index, item)
+                self.MaterialTable.setItem(row_index, col_index, item)
 
     def PopulateVendorTable(self):
 
@@ -88,51 +88,81 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
 
     def get_selected_material_data(self):
 
-        selected_row = self.materialTable.currentRow()
-        MaterialID = self.materialTable.item(selected_row, 0).text()
-        MaterialName = self.materialTable.item(selected_row, 1).text()
+        selected_row = self.MaterialTable.currentRow()
+        if selected_row is not None:
+            MaterialID_item = self.MaterialTable.item(selected_row, 0)
+            MaterialName_item = self.MaterialTable.item(selected_row, 1)
 
-        self.MaterialID.setText(MaterialID)
-        self.MaterialName.setText(MaterialName)
+            if MaterialID_item is not None and MaterialName_item is not None:
+                MaterialID = MaterialID_item.text()
+                MaterialName = MaterialName_item.text()
+
+                self.MaterialID.setText(MaterialID)
+                self.MaterialName.setText(MaterialName)
+            else:
+                # Show an error message if the items are None
+                error_message = "Error: Row Already Selected!."
+                QMessageBox.critical(self, "Error", error_message)
+        else:
+            # Show an error message if no row is selected
+            error_message = "Error: No row is selected."
+            QMessageBox.critical(self, "Error", error_message)
 
     def get_selected_vendor_data(self):
-
         selected_row = self.vendorTable.currentRow()
-        VendorID = self.vendorTable.item(selected_row, 0).text()
-        VendorName = self.vendorTable.item(selected_row, 1).text()
 
-        self.VendorID.setText(VendorID)
-        self.VendorName.setText(VendorName)
+        if selected_row is not None:
+            VendorID_item = self.vendorTable.item(selected_row, 0)
+            VendorName_item = self.vendorTable.item(selected_row, 1)
+
+            if VendorID_item is not None and VendorName_item is not None:
+                VendorID = VendorID_item.text()
+                VendorName = VendorName_item.text()
+
+                self.VendorID.setText(VendorID)
+                self.VendorName.setText(VendorName)
+            else:
+                # Show an error message if the items are None
+                error_message = "Error: Row Already Selected!"
+                QMessageBox.critical(self, "Error", error_message)
+        else:
+            # Show an error message if no row is selected
+            error_message = "Error: No row is selected."
+            QMessageBox.critical(self, "Error", error_message)
 
     def add_material(self):
 
-        if self.MaterialID == None or self.MaterialName == None or self.UnitCost == None or self.Quantity == None or self.VendorID == None or self.VendorName == None:
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText("Please Select All Required Attributes!")
-            msgBox.setWindowTitle("Confirmation Box")
-            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+        if self.MaterialID.text() == '' or self.MaterialName.text() == '' or self.UnitCost.text() == '' or self.Quantity.text() == '' or self.VendorID.text() == '' or self.VendorName.text() == '':
+            self.msgBox = QtWidgets.QMessageBox()
+            self.msgBox.setText("Please Select All Required Attributes!")
+            self.msgBox.setWindowTitle("Confirmation Box")
+            self.msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            self.msgBox.show()
 
         else:
             row_position = self.purchaseDetailsTable.rowCount()
             self.purchaseDetailsTable.insertRow(row_position)
 
-            self.purchaseDetailsTable.setItem(
-                row_position, 0, QTableWidgetItem(self.MaterialID.text()))
-            self.purchaseDetailsTable.setItem(
-                row_position, 1, QTableWidgetItem(self.MaterialName.text()))
-            self.purchaseDetailsTable.setItem(
-                row_position, 2, QTableWidgetItem(self.VendorID.text()))        
-            self.purchaseDetailsTable.setItem(
-                row_position, 3, QTableWidgetItem(self.VendorName.text()))
-            self.purchaseDetailsTable.setItem(
-                row_position, 4, QTableWidgetItem(self.UnitCost.text()))
-            self.purchaseDetailsTable.setItem(
-                row_position, 5, QTableWidgetItem(self.Quantity.text()))
+            if (self.UnitCost.text().isdigit() and self.Quantity.text().isdigit()):
 
-            # header = self.purchaseDetailsTable.horizontalHeader()
-            # header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-            # header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-            # header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+                self.purchaseDetailsTable.setItem(
+                    row_position, 0, QTableWidgetItem(self.MaterialID.text()))
+                self.purchaseDetailsTable.setItem(
+                    row_position, 1, QTableWidgetItem(self.MaterialName.text()))
+                self.purchaseDetailsTable.setItem(
+                    row_position, 2, QTableWidgetItem(self.VendorID.text()))        
+                self.purchaseDetailsTable.setItem(
+                    row_position, 3, QTableWidgetItem(self.VendorName.text()))
+                self.purchaseDetailsTable.setItem(
+                    row_position, 4, QTableWidgetItem(self.UnitCost.text()))
+                self.purchaseDetailsTable.setItem(
+                    row_position, 5, QTableWidgetItem(self.Quantity.text()))
+                
+            else:
+                self.msgBox = QtWidgets.QMessageBox()
+                self.msgBox.setText('Unit Price and Quantity should be numeric')
+                self.msgBox.setWindowTitle('Error')
+                self.msgBox.show()
 
             self.MaterialID.setText("")
             self.MaterialName.setText("")
@@ -196,3 +226,50 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorID.setText("")
         self.VendorName.setText("")
         self.PurchaseDate.setDate(QDate(2000, 1, 1))
+        self.purchaseDetailsTable.setRowCount(0)
+
+    def search_material(self):
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+
+        if self.MaterialDropDown.currentText() == 'Material ID':
+            search_text = int(self.SearchMaterial_2.text())
+            cursor.execute("SELECT * from Material where materialID = ?", (search_text))
+
+        elif self.MaterialDropDown.currentText() == 'Material Name':
+            search_text = str(self.SearchMaterial_2.text())
+            query = """
+                SELECT * from Material where materialName like (?)
+                """
+            cursor.execute(query, ('%' + search_text + '%'))
+
+        self.MaterialTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.MaterialTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.MaterialTable.setItem(row_index, col_index, item)
+
+    def search_vendor(self):
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+
+        if self.VendorDropDown.currentText() == 'Vendor ID':
+            search_text = int(self.SearchVendor_2.text())
+            cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text))
+
+        elif self.VendorDropDown.currentText() == 'Vendor Name':
+            search_text = str(self.SearchVendor_2.text())
+            query = """
+                SELECT * from Vendor where vendorName like (?)
+                """
+            cursor.execute(query, ('%' + search_text + '%'))
+
+        self.vendorTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.vendorTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.vendorTable.setItem(row_index, col_index, item)
