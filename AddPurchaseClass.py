@@ -5,8 +5,6 @@ from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 import sys
 import pyodbc
-# import VendorScreen, PurchaseClass
-# from PurchaseClass import PurchaseScreen
 
 # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 server = 'LAPTOP-MNMD5RBU'
@@ -31,7 +29,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.PopulateMaterialTable()
         self.PopulateVendorTable()
 
-        self.materialTable.itemSelectionChanged.connect(self.get_selected_material_data)
+        self.MaterialTable.itemSelectionChanged.connect(self.get_selected_material_data)
         self.vendorTable.itemSelectionChanged.connect(self.get_selected_vendor_data)
 
         self.MaterialID.setDisabled(True)
@@ -49,13 +47,13 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
     def PopulateMaterialTable(self):
 
         cursor.execute("SELECT * FROM Material")
-        self.materialTable.setRowCount(0)
+        self.MaterialTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
-            self.materialTable.insertRow(row_index)
+            self.MaterialTable.insertRow(row_index)
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
-                self.materialTable.setItem(row_index, col_index, item)
+                self.MaterialTable.setItem(row_index, col_index, item)
 
     def PopulateVendorTable(self):
 
@@ -70,21 +68,47 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
 
     def get_selected_material_data(self):
 
-        selected_row = self.materialTable.currentRow()
-        MaterialID = self.materialTable.item(selected_row, 0).text()
-        MaterialName = self.materialTable.item(selected_row, 1).text()
+        selected_row = self.MaterialTable.currentRow()
+        if selected_row is not None:
+            MaterialID_item = self.MaterialTable.item(selected_row, 0)
+            MaterialName_item = self.MaterialTable.item(selected_row, 1)
 
-        self.MaterialID.setText(MaterialID)
-        self.MaterialName.setText(MaterialName)
+            if MaterialID_item is not None and MaterialName_item is not None:
+                MaterialID = MaterialID_item.text()
+                MaterialName = MaterialName_item.text()
+
+                self.MaterialID.setText(MaterialID)
+                self.MaterialName.setText(MaterialName)
+            else:
+                # Show an error message if the items are None
+                error_message = "Error: Row Already Selected!."
+                QMessageBox.critical(self, "Error", error_message)
+        else:
+            # Show an error message if no row is selected
+            error_message = "Error: No row is selected."
+            QMessageBox.critical(self, "Error", error_message)
 
     def get_selected_vendor_data(self):
-
         selected_row = self.vendorTable.currentRow()
-        VendorID = self.vendorTable.item(selected_row, 0).text()
-        VendorName = self.vendorTable.item(selected_row, 1).text()
 
-        self.VendorID.setText(VendorID)
-        self.VendorName.setText(VendorName)
+        if selected_row is not None:
+            VendorID_item = self.vendorTable.item(selected_row, 0)
+            VendorName_item = self.vendorTable.item(selected_row, 1)
+
+            if VendorID_item is not None and VendorName_item is not None:
+                VendorID = VendorID_item.text()
+                VendorName = VendorName_item.text()
+
+                self.VendorID.setText(VendorID)
+                self.VendorName.setText(VendorName)
+            else:
+                # Show an error message if the items are None
+                error_message = "Error: Row Already Selected!"
+                QMessageBox.critical(self, "Error", error_message)
+        else:
+            # Show an error message if no row is selected
+            error_message = "Error: No row is selected."
+            QMessageBox.critical(self, "Error", error_message)
 
     def add_material(self):
 
@@ -178,6 +202,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorID.setText("")
         self.VendorName.setText("")
         self.PurchaseDate.setDate(QDate(2000, 1, 1))
+        self.purchaseDetailsTable.setRowCount(0)
 
     def search_material(self):
         connection = pyodbc.connect(connection_string)
@@ -185,19 +210,22 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
 
         if self.MaterialDropDown.currentText() == 'Material ID':
             search_text = int(self.SearchMaterial_2.text())
-            cursor.execute("SELECT * from Material where materialID = ?", (search_text,))
+            cursor.execute("SELECT * from Material where materialID = ?", (search_text))
 
         elif self.MaterialDropDown.currentText() == 'Material Name':
             search_text = str(self.SearchMaterial_2.text())
-            cursor.execute("SELECT * from Material where materialName = ?", (search_text,))
+            query = """
+                SELECT * from Material where materialName like (?)
+                """
+            cursor.execute(query, ('%' + search_text + '%'))
 
-        self.materialTable.setRowCount(0)
+        self.MaterialTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
-            self.materialTable.insertRow(row_index)
+            self.MaterialTable.insertRow(row_index)
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
-                self.materialTable.setItem(row_index, col_index, item)
+                self.MaterialTable.setItem(row_index, col_index, item)
 
     def search_vendor(self):
         connection = pyodbc.connect(connection_string)
@@ -205,11 +233,14 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
 
         if self.VendorDropDown.currentText() == 'Vendor ID':
             search_text = int(self.SearchVendor_2.text())
-            cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text,))
+            cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text))
 
         elif self.VendorDropDown.currentText() == 'Vendor Name':
             search_text = str(self.SearchVendor_2.text())
-            cursor.execute("SELECT * from Vendor where vendorName = ?", (search_text,))
+            query = """
+                SELECT * from Vendor where vendorName like (?)
+                """
+            cursor.execute(query, ('%' + search_text + '%'))
 
         self.vendorTable.setRowCount(0)
 

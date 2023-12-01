@@ -155,7 +155,7 @@
     </column>
     <column>
      <property name="text">
-      <string>Vendor ID</string>
+      <string>Vendor Name</string>
      </property>
     </column>
    </widget>
@@ -207,7 +207,7 @@
       <string>Date:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="searchVendorId">
+    <widget class="QLineEdit" name="searchVendorName">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -227,7 +227,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Vendor ID</string>
+      <string>Vendor Name</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_6">
@@ -339,7 +339,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>View</string>
+     <string>View/Edit</string>
     </property>
    </widget>
    <widget class="QPushButton" name="deletePurchaseButton">

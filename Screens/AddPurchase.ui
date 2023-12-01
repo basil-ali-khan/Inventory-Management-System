@@ -92,7 +92,7 @@
     <property name="title">
      <string>Material/Vendor Info</string>
     </property>
-    <widget class="QTableWidget" name="materialTable">
+    <widget class="QTableWidget" name="MaterialTable">
      <property name="geometry">
       <rect>
        <x>10</x>
