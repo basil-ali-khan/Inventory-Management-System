@@ -374,9 +374,9 @@
    <widget class="QPushButton" name="editVendorButton">
     <property name="geometry">
      <rect>
-      <x>920</x>
+      <x>833</x>
       <y>410</y>
-      <width>131</width>
+      <width>150</width>
       <height>41</height>
      </rect>
     </property>
@@ -409,6 +409,26 @@
     </property>
     <property name="text">
      <string>Search</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteVendorButton">
+    <property name="geometry">
+     <rect>
+      <x>997</x>
+      <y>410</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete</string>
     </property>
    </widget>
   </widget>

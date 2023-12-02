@@ -39,7 +39,7 @@ class VendorScreen(QtWidgets.QMainWindow):
         self.addVendorButton.clicked.connect(self.AddVendor)
         self.editVendorButton.clicked.connect(self.EditVendor)
         self.searchVendorButton.clicked.connect(self.SearchVendor)
-        # self.deleteVendorButton.clicked.connect(self.DeleteVendor)
+        self.deleteVendorButton.clicked.connect(self.DeleteVendor)
 
     def PopulateVendorTable(self):
         cursor.execute("select * from vendor")
@@ -108,30 +108,43 @@ class VendorScreen(QtWidgets.QMainWindow):
                 item = QTableWidgetItem(str(cell_data))
                 self.vendorTable.setItem(row_index, col_index, item)
 
-    # def DeleteVendor(self):
-    #     selected_items = self.vendorTable.selectedItems()
+    def DeleteVendor(self):
+        selected_items = self.vendorTable.selectedItems()
 
-    #     if not selected_items:
-    #         self.msg = QtWidgets.QMessageBox()
-    #         self.msg.setWindowTitle("Error")
-    #         self.msg.setText("Please select an entry to delete.")
-    #         self.msg.show()
-    #         return
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to delete.")
+            self.msg.show()
+            return
 
-    #     # Assuming the first column contains a unique identifier (e.g., vendor_id)
-    #     selected_row = selected_items[0].row()
-    #     vendor_id = int(self.vendorTable.item(selected_row, 0).text())
+        # Assuming the first column contains a unique identifier (e.g., vendor_id)
+        selected_row = selected_items[0].row()
+        vendor_id = int(self.vendorTable.item(selected_row, 0).text())
 
-    #     sql_query = "delete from vendor WHERE vendorID = ?"
-    #     cursor.execute(sql_query, (vendor_id))
-    #     connection.commit()
+        # Code block to check if the vendor has purchase history. If yes, then vendor cannot be deleted
+        sql_check_sales = "select count(*) from Purchase where vendorID = ?"
+        cursor.execute(sql_check_sales, (vendor_id,))
+        result = cursor.fetchone()
 
-    #     self.msg = QtWidgets.QMessageBox()
-    #     self.msg.setWindowTitle("Success")
-    #     self.msg.setText("Vendor deleted successfully.")
-    #     self.msg.show()
+        # Throw error message if customers has pre-existing sales record
+        if result and result[0] > 0:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle("Error")
+                self.msg.setText("Cannot delete vendor with existing purchase records.")
+                self.msg.show()
+                return
 
-    #     self.PopulateVendorTable()  # Update the vendorTable after deletion
+        sql_query = "delete from vendor WHERE vendorID = ?"
+        cursor.execute(sql_query, (vendor_id))
+        connection.commit()
+
+        self.msg = QtWidgets.QMessageBox()
+        self.msg.setWindowTitle("Success")
+        self.msg.setText("Vendor deleted successfully.")
+        self.msg.show()
+
+        self.PopulateVendorTable()  # Update the vendorTable after deletion
 
     def EditVendor(self):
         selected_items = self.vendorTable.selectedItems()

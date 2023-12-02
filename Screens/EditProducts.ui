@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>categoryNameBox</class>
+ <widget class="QMainWindow" name="categoryNameBox">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -30,7 +30,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>30</y>
+       <y>70</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -39,11 +39,11 @@
       <string>Product Name</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_5">
+    <widget class="QLineEdit" name="productNameBox">
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>30</y>
+       <y>70</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -59,20 +59,20 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>80</y>
+       <y>120</y>
        <width>111</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>Quantity Added</string>
+      <string>Quantity Produced</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>130</y>
+       <y>170</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -81,11 +81,11 @@
       <string>Unit Price</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_7">
+    <widget class="QLineEdit" name="qtyProducedBox">
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>80</y>
+       <y>120</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -101,20 +101,20 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>180</y>
+       <y>220</y>
        <width>101</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>Category ID</string>
+      <string>Category Name</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
+    <widget class="QLineEdit" name="priceBox">
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>130</y>
+       <y>170</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -126,23 +126,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_9">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>180</y>
-       <width>271</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="readOnly">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="doneButton">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -159,7 +143,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>230</y>
+       <y>260</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -168,7 +152,7 @@
       <string>Description</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="cancelButton">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -178,25 +162,81 @@
       </rect>
      </property>
      <property name="text">
-      <string>Clear</string>
+      <string>Cancel</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_6">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>360</y>
-      <width>391</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
+    <widget class="QTextEdit" name="productDesc">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>289</y>
+       <width>391</width>
+       <height>131</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="categoryBox">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>220</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Men</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Women</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Boys</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Girls</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLineEdit" name="productIdBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>20</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Product ID</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">

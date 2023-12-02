@@ -6,6 +6,8 @@ import sys
 import pyodbc
 import VendorClass
 import CustomerClass
+import MaterialClass
+import ProductsClass
 
 server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 database = 'Inventory_Management_System'  # Name of your Northwind database
@@ -53,16 +55,16 @@ class UI(QtWidgets.QMainWindow):
 
         self.logged_in = False
 
-        # self.productsButton.clicked.connect(self.OpenProductsScreen)
-        # self.materialButton.clicked.connect(self.OpenMaterialScreen)
+        self.productsButton.clicked.connect(self.OpenProductsScreen)
+        self.materialButton.clicked.connect(self.OpenMaterialScreen)
 
-    # def OpenProductsScreen(self):
-    #     self.products = ProductsClass.Product()
-    #     self.products.show()
+    def OpenProductsScreen(self):
+        self.products = ProductsClass.ProductScreen()
+        self.products.show()
 
-    # def OpenMaterialScreen(self):
-    #     self.materials = MaterialClass.Material()
-    #     self.materials.show()
+    def OpenMaterialScreen(self):
+        self.materials = MaterialClass.MaterialScreen()
+        self.materials.show()
 
     def OpenCustomerScreen(self):
         self.customer = CustomerClass.CustomerScreen()

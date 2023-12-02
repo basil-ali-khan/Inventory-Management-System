@@ -463,7 +463,7 @@
    <widget class="QPushButton" name="editCustomerButton">
     <property name="geometry">
      <rect>
-      <x>980</x>
+      <x>903</x>
       <y>410</y>
       <width>150</width>
       <height>41</height>
@@ -498,6 +498,26 @@
     </property>
     <property name="text">
      <string>Search</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteCustomerButton">
+    <property name="geometry">
+     <rect>
+      <x>1067</x>
+      <y>410</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete</string>
     </property>
    </widget>
   </widget>
