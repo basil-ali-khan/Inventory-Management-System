@@ -89,47 +89,29 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         toDate = self.searchToDate.date().toString("yyyy-MM-dd")
 
         query = """
-        select purchase.purchaseID, Purchase.purchaseDate, Purchase.totalAmount, vendor.vendorName from purchase join Vendor on purchase.vendorID = Vendor.vendorID
-        WHERE """
-        if purchaseId == "" and vendorName == "" and fromDate == "2000-01-01" and toDate == "2000-01-01":
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setWindowTitle('Error')
-            self.msg.setText('Please select a search criteria and/or enter search value')
+        SELECT purchase.purchaseID, Purchase.purchaseDate, Purchase.totalAmount, vendor.vendorName 
+        FROM purchase 
+        JOIN Vendor ON purchase.vendorID = Vendor.vendorID
+        WHERE 1 = 1
+        """
 
-        elif purchaseId == "" and vendorName == "":
-            query += """ (Purchase.purchaseDate BETWEEN ? AND ?) """ 
-            cursor.execute(query, (fromDate, toDate))
-            self.purchaseTable.setRowCount(0)
+        params = []
 
-        elif purchaseId == "" and fromDate == "2000-01-01" and toDate == "2000-01-01":
-            query += """ vendor.vendorName like (?) """
-            cursor.execute(query, ('%' + vendorName + '%'))
-            self.purchaseTable.setRowCount(0)
+        if purchaseId:
+            query += " AND purchase.purchaseID = ? "
+            params.append(purchaseId)
 
-        elif vendorName == "" and fromDate == "2000-01-01" and toDate == "2000-01-01":
-            query += """ purchase.purchaseID = ? """
-            cursor.execute(query, (purchaseId))
-            self.purchaseTable.setRowCount(0)
+        if vendorName:
+            query += " AND vendor.vendorName LIKE ? "
+            params.append('%' + vendorName + '%')
 
-        elif fromDate == "2000-01-01" and toDate == "2000-01-01":
-            query += """ purchase.purchaseID = ? AND vendor.vendorName like (?) """
-            cursor.execute(query, (purchaseId, ('%' + vendorName + '%')))
-            self.purchaseTable.setRowCount(0)
+        if fromDate != "2000-01-01" and toDate != "2000-01-01":
+            query += " AND Purchase.purchaseDate BETWEEN ? AND ? "
+            params.extend([fromDate, toDate])
 
-        elif vendorName == "":
-            query += """ purchase.purchaseID = ? AND (Purchase.purchaseDate BETWEEN ? AND ?) """
-            cursor.execute(query, (purchaseId, fromDate, toDate))
-            self.purchaseTable.setRowCount(0)        
+        cursor.execute(query, params)
 
-        elif purchaseId == "":
-            query += """ vendor.vendorName like (?) AND (Purchase.purchaseDate BETWEEN ? AND ?) """
-            cursor.execute(query, (('%' + vendorName + '%'), fromDate, toDate))
-            self.purchaseTable.setRowCount(0)
-
-        elif purchaseId == "" and vendorName == "" and fromDate == toDate:
-            query += """ Purchase.purchaseDate = ?) """
-            cursor.execute(query, (toDate))
-            self.purchaseTable.setRowCount(0)
+        self.purchaseTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
             self.purchaseTable.insertRow(row_index)

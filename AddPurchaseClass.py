@@ -111,12 +111,28 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
             QMessageBox.critical(self, "Error", error_message)
 
     def add_material(self):
+        # Get text from line edits
+        material_id = self.MaterialID.text()
+        material_name = self.MaterialName.text()
+        unit_cost = self.UnitCost.text()
+        quantity = self.Quantity.text()
+        vendor_id = self.VendorID.text()
+        vendor_name = self.VendorName.text()
 
-        if self.MaterialID == None or self.MaterialName == None or self.UnitCost == None or self.Quantity == None or self.VendorID == None or self.VendorName == None:
+        # Check the condition
+        if (
+            material_id == ""
+            or material_name == ""
+            or unit_cost == ""
+            or quantity == ""
+            or vendor_id == ""
+            or vendor_name == ""
+        ):
             msgBox = QtWidgets.QMessageBox()
-            msgBox.setText("Please Select All Required Attributes!")
+            msgBox.setText("Please Enter All Required Attributes!")
             msgBox.setWindowTitle("Confirmation Box")
             msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
 
         else:
             row_position = self.purchaseDetailsTable.rowCount()
@@ -134,11 +150,6 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
                 row_position, 4, QTableWidgetItem(self.UnitCost.text()))
             self.purchaseDetailsTable.setItem(
                 row_position, 5, QTableWidgetItem(self.Quantity.text()))
-
-            # header = self.purchaseDetailsTable.horizontalHeader()
-            # header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-            # header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-            # header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
 
             self.MaterialID.setText("")
             self.MaterialName.setText("")

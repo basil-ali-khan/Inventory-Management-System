@@ -1,0 +1,128 @@
+# Importing essential modules
+import typing
+from PyQt6 import QtCore, QtWidgets, uic
+from PyQt6.QtCore import QDate
+from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
+import sys
+import pyodbc
+from ViewSaleClass import ViewSaleScreen
+from AddSaleClass import AddSaleScreen
+
+# server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+server = 'LAPTOP-MNMD5RBU'
+database = 'Inventory_Management_System_Script'  # Name of your Northwind database
+use_windows_authentication = True  # Set to True to use Windows Authentication
+username = 'your_username'  # Specify a username if not using Windows Authentication
+password = 'your_password'  # Specify a password if not using Windows Authentication
+
+if use_windows_authentication:
+    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
+else:
+    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+
+connection = pyodbc.connect(connection_string)
+cursor = connection.cursor()
+
+class SaleScreen(QtWidgets.QMainWindow):   
+
+    def __init__(self):
+        
+        super(SaleScreen, self).__init__() 
+        uic.loadUi('Screens/Sale.ui', self)
+
+        self.PopulateSaleTable()        
+        self.viewSaleButton.clicked.connect(self.ViewSale)
+        self.addSaleButton.clicked.connect(self.AddSale)
+        self.deleteSaleButton.clicked.connect(self.DeleteSale)
+        self.searchSaleButton.clicked.connect(self.SearchSale)
+
+    def PopulateSaleTable(self):
+
+        cursor.execute("SELECT Sale.saleID, Sale.saleDate, Sale.totalAmount, Customer.customerName, Customer.contactNumber FROM Sale join Customer on sale.customerID = Customer.customerID")
+        self.saleTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.saleTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.saleTable.setItem(row_index, col_index, item)
+
+    def ViewSale(self):
+            
+        selected_row = self.saleTable.currentRow()
+
+        sale_id = str(self.saleTable.item(selected_row, 0).text())
+        sale_date = str(self.saleTable.item(selected_row, 1).text())
+        total_amount = int(self.saleTable.item(selected_row, 2).text()) 
+        customer_name= str(self.saleTable.item(selected_row, 3).text())
+
+        self.viewSale = ViewSaleScreen(sale_id, sale_date, total_amount, customer_name)
+        self.viewSale.show()
+            
+    def AddSale(self):
+        self.addSale = AddSaleScreen()
+        self.addSale.show()
+
+    def DeleteSale(self):
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText("Are you sure you want to delete this Sale?")
+        msgBox.setWindowTitle("Confirmation Box")
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Cancel)
+
+        returnValue = msgBox.exec()
+
+        if returnValue == QtWidgets.QMessageBox.StandardButton.Ok:
+            selected_row = self.saleTable.currentRow()
+
+            self.saleTable.removeRow(selected_row)
+
+            # sale_id = self.saleTable.item(selected_row, 0).text()
+            
+            # # Delete the data from the SQL database
+            # cursor.execute(f"DELETE FROM Sale WHERE saleID = ?", sale_id)
+            # connection.commit()
+
+    def SearchSale(self):
+        saleID = self.searchSaleId.text() 
+        customerName = self.searchCustomerName.text() 
+        contactNumber = self.searchPhoneNumber.text()
+        fromDate = self.searchFromDate.date().toString("yyyy-MM-dd") 
+        toDate = self.searchToDate.date().toString("yyyy-MM-dd") 
+
+        query = """
+        SELECT Sale.saleID, Sale.saleDate, Sale.totalAmount, customer.customerName, customer.contactNumber 
+        FROM Sale 
+        JOIN Customer ON Sale.customerID = Customer.customerID
+        WHERE 1 = 1
+        """
+
+        params = []
+
+        if saleID:
+            query += " AND Sale.saleID = ? "
+            params.append(saleID)
+
+        if customerName:
+            query += " AND customer.customerName LIKE ? "
+            params.append('%' + customerName + '%')
+
+        if fromDate != "2000-01-01" and toDate != "2000-01-01":
+            query += " AND Sale.SaleDate BETWEEN ? AND ? "
+            params.extend([fromDate, toDate])
+
+        if contactNumber:
+            query += " AND customer.contactNumber LIKE ? "
+            params.append('%' + contactNumber + '%')
+
+        cursor.execute(query, params)
+
+        self.saleTable.setRowCount(0)
+
+        for row_index, row_data in enumerate(cursor.fetchall()):
+            self.saleTable.insertRow(row_index)
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.saleTable.setItem(row_index, col_index, item)
+
+
+            
