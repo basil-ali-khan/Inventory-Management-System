@@ -6,26 +6,10 @@ import sys
 import pyodbc
 
 
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-database = 'Inventory_Management_System'  # Name of your Northwind database
-use_windows_authentication = True  # Set to True to use Windows Authentication
-username = 'sa'  # Specify a username if not using Windows Authentication
-password = 'Sirmehdi69'  # Specify a password if not using Windows Authentication
-
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = (
-        'DRIVER={ODBC Driver 18 for SQL Server};SERVER=localhost;DATABASE=Inventory_Management_System;UID=sa;PWD=Sirmehdi69;TrustServerCertificate=yes;Connection Timeout=30;'
-    )
-
-# Establish a connection to the database
-connection = pyodbc.connect(connection_string)
-
-# Create a cursor to interact with the database
-cursor = connection.cursor()
+from ConnectionString import connection, cursor
 
 class EditMaterialScreen(QtWidgets.QMainWindow):   
+    materialUpdated = QtCore.pyqtSignal()
     def __init__(self, id, name, desc, units):
         # Call the inherited classes __init__ method
         super(EditMaterialScreen, self).__init__() 
@@ -45,22 +29,36 @@ class EditMaterialScreen(QtWidgets.QMainWindow):
         self.close()
 
     def EditDone(self):
+        self.msg = QtWidgets.QMessageBox()
         id = self.materialIdBox.text()
         newName = self.materialNameBox.text()
         newUnits = self.unitsBox.text()
         newDesc = self.materialDescBox.toPlainText()
 
-        sql_query = """
-                    update material
-                    set materialName = (?), description = (?), units = (?)
-                    where materialID = (?)
-                    """
-        
-        cursor.execute(sql_query, (newName, newDesc, newUnits, id))
-        connection.commit()
+        if not newUnits.isdigit():
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Units should be numeric")    
+            self.msg.show()  
+        else:  
+            if id  != '' and newName != '' and newUnits != '' and newDesc != '':
+                sql_query = """
+                            update material
+                            set materialName = (?), description = (?), units = (?)
+                            where materialID = (?)
+                            """
+                
+                cursor.execute(sql_query, (newName, newDesc, newUnits, id))
+                connection.commit()
 
-        self.msg = QtWidgets.QMessageBox()
-        self.msg.setWindowTitle("Success")
-        self.msg.setText("Edit done successfully.")
-        self.msg.show()
+                
+                self.msg.setWindowTitle("Success")
+                self.msg.setText("Edit done successfully.")
+                self.msg.show()
+
+                self.materialUpdated.emit()
+            else:
+                self.msg.setWindowTitle("Error")
+                self.msg.setText("Enter complete information")    
+                self.msg.show()  
+
         

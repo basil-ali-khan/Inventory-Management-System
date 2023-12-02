@@ -7,24 +7,7 @@ import pyodbc
 from EditMaterialClass import EditMaterialScreen
 
 
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-database = 'Inventory_Management_System'  # Name of your Northwind database
-use_windows_authentication = True  # Set to True to use Windows Authentication
-username = 'sa'  # Specify a username if not using Windows Authentication
-password = 'Sirmehdi69'  # Specify a password if not using Windows Authentication
-
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = (
-        'DRIVER={ODBC Driver 18 for SQL Server};SERVER=localhost;DATABASE=Inventory_Management_System;UID=sa;PWD=Sirmehdi69;TrustServerCertificate=yes;Connection Timeout=30;'
-    )
-
-# Establish a connection to the database
-connection = pyodbc.connect(connection_string)
-
-# Create a cursor to interact with the database
-cursor = connection.cursor()
+from ConnectionString import connection, cursor 
 
 class MaterialScreen(QtWidgets.QMainWindow):   
     def __init__(self):
@@ -83,6 +66,15 @@ class MaterialScreen(QtWidgets.QMainWindow):
         self.searchMaterialValue.setText('')
 
     def EditMaterial(self):
+        selected_items = self.materialTable.selectedItems()
+
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to edit.")
+            self.msg.show()
+            return
+
         row = self.materialTable.currentRow()
         id = self.materialTable.item(row, 0).text()
         name = self.materialTable.item(row, 1).text()        
@@ -90,6 +82,7 @@ class MaterialScreen(QtWidgets.QMainWindow):
         units = self.materialTable.item(row, 3).text()
 
         self.editMaterialScreen = EditMaterialScreen(id, name, desc, units)
+        self.editMaterialScreen.materialUpdated.connect(self.PopulateMaterialTable)
         self.editMaterialScreen.show()
 
     def PopulateMaterialTable(self):
@@ -117,6 +110,16 @@ class MaterialScreen(QtWidgets.QMainWindow):
                 self.materialTable.clearContents()
                 self.materialTable.setRowCount(0)
 
+                rows = cursor.fetchall()
+
+                if not rows:
+                    self.msg = QtWidgets.QMessageBox()
+                    self.msg.setWindowTitle("No Results")
+                    self.msg.setText("No results found for the given search criteria.")
+                    self.msg.show()
+                    self.PopulateMaterialTable()
+                    return
+
                 for row_index, row_data in enumerate(cursor.fetchall()):
                     print('populating row')
                     self.materialTable.insertRow(row_index)
@@ -131,6 +134,16 @@ class MaterialScreen(QtWidgets.QMainWindow):
                 #connection.commit()     
                 self.materialTable.clearContents()
                 self.materialTable.setRowCount(0)
+
+                rows = cursor.fetchall()
+
+                if not rows:
+                    self.msg = QtWidgets.QMessageBox()
+                    self.msg.setWindowTitle("No Results")
+                    self.msg.setText("No results found for the given search criteria.")
+                    self.msg.show()
+                    self.PopulateMaterialTable()
+                    return
 
                 for row_index, row_data in enumerate(cursor.fetchall()):
                     print('populating row')
@@ -147,6 +160,16 @@ class MaterialScreen(QtWidgets.QMainWindow):
 
                     self.materialTable.clearContents()
                     self.materialTable.setRowCount(0)
+
+                    rows = cursor.fetchall()
+
+                    if not rows:
+                        self.msg = QtWidgets.QMessageBox()
+                        self.msg.setWindowTitle("No Results")
+                        self.msg.setText("No results found for the given search criteria.")
+                        self.msg.show()
+                        self.PopulateMaterialTable()
+                        return
 
                     for row_index, row_data in enumerate(cursor.fetchall()):
                         print('populating row')
@@ -168,3 +191,4 @@ class MaterialScreen(QtWidgets.QMainWindow):
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle('Error')
             self.msg.setText('Please select search criteria and/or enter search value')
+            self.msg.show()

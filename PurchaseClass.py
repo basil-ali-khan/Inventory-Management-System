@@ -8,25 +8,8 @@ import pyodbc
 from AddPurchaseClass import AddPurchaseScreen
 from ViewPurchaseClass import ViewPurchaseScreen
 
-# server = 'LAPTOP-MNMD5RBU'
-# database = 'Inventory_Management_System_Script'  # Name of your Northwind database
-# use_windows_authentication = True  # Set to True to use Windows Authentication
-# username = 'your_username'  # Specify a username if not using Windows Authentication
-# password = 'your_password'  # Specify a password if not using Windows Authentication
+from ConnectionString import connection, cursor
 
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-database = 'Inventory_Management_System'  # Name of your Northwind database
-use_windows_authentication = True  # Set to True to use Windows Authentication
-username = 'sa'  # Specify a username if not using Windows Authentication
-password = 'Sirmehdi69'  # Specify a password if not using Windows Authentication
-
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-
-connection = pyodbc.connect(connection_string)
-cursor = connection.cursor()
 
 class PurchaseScreen(QtWidgets.QMainWindow):   
 

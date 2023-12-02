@@ -6,24 +6,7 @@ import sys
 import pyodbc
 from EditProductClass import EditProductScreen
 
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-database = 'Inventory_Management_System'  # Name of your Northwind database
-use_windows_authentication = True  # Set to True to use Windows Authentication
-username = 'sa'  # Specify a username if not using Windows Authentication
-password = 'Sirmehdi69'  # Specify a password if not using Windows Authentication
-
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = (
-        'DRIVER={ODBC Driver 18 for SQL Server};SERVER=localhost;DATABASE=Inventory_Management_System;UID=sa;PWD=Sirmehdi69;TrustServerCertificate=yes;Connection Timeout=30;'
-    )
-
-# Establish a connection to the database
-connection = pyodbc.connect(connection_string)
-
-# Create a cursor to interact with the database
-cursor = connection.cursor()
+from ConnectionString import connection, cursor
 
 class ProductScreen(QtWidgets.QMainWindow):   
     def __init__(self):
@@ -41,6 +24,8 @@ class ProductScreen(QtWidgets.QMainWindow):
 
         self.clearProductButton.clicked.connect(self.ClearProduct)
 
+        self.refreshButton.clicked.connect(self.PopulateProductTable)
+
         # self.productTable.itemClicked.connect(self.EditProduct)
         # self.editProductButton.clicked.connect(self.OpenProductToEdit(id, self.name, self.qtyProduced, self.currentPrice, self.categoryName, self.desc))
 
@@ -49,7 +34,18 @@ class ProductScreen(QtWidgets.QMainWindow):
 
     def EditProduct(self):
         # row = product.row()
+        
+        selected_items = self.productTable.selectedItems()
+
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to edit.")
+            self.msg.show()
+            return
+        
         row = self.productTable.currentRow()
+
         id = self.productTable.item(row, 0).text()
         name = self.productTable.item(row, 1).text()        
         desc = self.productTable.item(row, 2).text()
@@ -58,16 +54,10 @@ class ProductScreen(QtWidgets.QMainWindow):
         categoryName = self.productTable.item(row, 6).text()
 
         self.editProductScreen = EditProductScreen(id, name, qtyProduced, currentPrice, categoryName, desc)
+        self.editProductScreen.productUpdated.connect(self.PopulateProductTable)
         self.editProductScreen.show()
         
-        # self.editProductButton.clicked.connect(self.OpenProductToEdit(id, self.name, self.qtyProduced, self.currentPrice, self.categoryName, self.desc))
-        # self.OpenProductToEdit(id, name, qtyProduced, currentPrice, categoryName, desc)
         
-    # def OpenProductToEdit(self, id, name, qtyProduced, currentPrice, categoryName, desc):
-    #     self.editProductScreen = EditProductScreen(id, name, qtyProduced, currentPrice, categoryName, desc)
-    #     self.editProductScreen.show()
-
-
     def ClearProduct(self):
         self.productNameBox.setText('')
         self.productQuantityBox.setText('')
@@ -105,13 +95,18 @@ class ProductScreen(QtWidgets.QMainWindow):
 
         if name == '' or quantityProduced == '' or price == '' or category == '' or desc == '':
             self.msg.setWindowTitle("Error")
-            self.msg.setText("Please enter complete information.")    
+            self.msg.setText("Please enter complete information.")   
+
+        elif not quantityProduced.isdigit() or not price.isdigit():
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Price and quantity produced should be numeric")   
+
         else:
             sql_query = 'insert into Products([productName], [description], price, quantityProduced, quantitySold, categoryID) values(?, ?, ?, ?, ?, ?)'
             cursor.execute(sql_query, (name, desc, price, quantityProduced, quantitySold, categoryID))
             connection.commit()
             self.msg.setWindowTitle("Success")
-            self.msg.setText("Vendor added successfully.")
+            self.msg.setText("Product added successfully.")
             
 
         self.msg.show()
@@ -122,11 +117,12 @@ class ProductScreen(QtWidgets.QMainWindow):
         criteria = self.searchProductCriteria.currentText().strip()
         criteriaValue = self.searchProductValue.text().strip()
 
+
         if (criteria != '' and criteriaValue != ''):        
             # print('criteria: ', criteria)
 
             if criteria == 'Product Name':
-                sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where productName = (?)'
+                sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where productName like (?)'
             elif criteria == 'Quantity Produced':
                 sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where quantityProduced = (?)'
             elif criteria == 'Quantity Sold':
@@ -145,6 +141,16 @@ class ProductScreen(QtWidgets.QMainWindow):
             self.productTable.clearContents()
             self.productTable.setRowCount(0)
 
+            rows = cursor.fetchall()
+
+            if not rows:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle("No Results")
+                self.msg.setText("No results found for the given search criteria.")
+                self.msg.show()
+                self.PopulateProductTable()
+                return
+
             for row_index, row_data in enumerate(cursor.fetchall()):
                 print('populating row')
                 self.productTable.insertRow(row_index)
@@ -157,6 +163,7 @@ class ProductScreen(QtWidgets.QMainWindow):
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle('Error')
             self.msg.setText('Please select search criteria and/or enter search value')
+            self.msg.show()
 
 
 

@@ -77,14 +77,17 @@
    <widget class="QLineEdit" name="searchProductValue">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>150</x>
       <y>640</y>
-      <width>470</width>
+      <width>370</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>  Search</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string extracomment="Search"/>
     </property>
    </widget>
    <widget class="QPushButton" name="editProductButton">
@@ -321,7 +324,7 @@
    <widget class="QPushButton" name="searchProductButton">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>540</x>
       <y>640</y>
       <width>131</width>
       <height>41</height>
@@ -492,6 +495,19 @@
       </font>
      </property>
     </column>
+   </widget>
+   <widget class="QPushButton" name="refreshButton">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>640</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Refresh</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
