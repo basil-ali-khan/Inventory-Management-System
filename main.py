@@ -131,6 +131,7 @@ import MaterialClass
 import EditVendorClass
 import CustomerClass
 from PurchaseClass import PurchaseScreen
+import SaleClass
 
 from ConnectionString import connection, cursor
 
@@ -161,6 +162,7 @@ class UI(QtWidgets.QMainWindow):
         self.materialButton.clicked.connect(self.OpenMaterialScreen)
         self.customerButton.clicked.connect(self.OpenCustomerScreen)
         self.purchaseButton.clicked.connect(self.OpenPurchaseScreen)
+        self.salesButton.clicked.connect(self.OpenSaleScreen)
         self.logoutButton.clicked.connect(self.Logout)
 
         self.logged_in = False
@@ -172,6 +174,10 @@ class UI(QtWidgets.QMainWindow):
     def OpenProductsScreen(self):
         self.products = ProductsClass.ProductScreen()
         self.products.show()
+
+    def OpenSaleScreen(self):
+        self.sales = SaleClass.SaleScreen()
+        self.sales.show()
 
     def OpenMaterialScreen(self):
         self.materials = MaterialClass.MaterialScreen()
