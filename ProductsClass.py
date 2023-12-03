@@ -24,7 +24,9 @@ class ProductScreen(QtWidgets.QMainWindow):
 
         self.clearProductButton.clicked.connect(self.ClearProduct)
 
-        self.refreshButton.clicked.connect(self.PopulateProductTable)
+        # self.refreshButton.clicked.connect(self.PopulateProductTable)
+
+        self.deleteProductButton.clicked.connect(self.DeleteProduct)
 
         # self.productTable.itemClicked.connect(self.EditProduct)
         # self.editProductButton.clicked.connect(self.OpenProductToEdit(id, self.name, self.qtyProduced, self.currentPrice, self.categoryName, self.desc))
@@ -156,7 +158,7 @@ class ProductScreen(QtWidgets.QMainWindow):
                 self.productTable.insertRow(row_index)
                 for col_index, cell_data in enumerate(row_data):
                     item = QTableWidgetItem(str(cell_data))
-                    print('Adding item to vendor table.')
+                    print('Adding item to product table.')
                     self.productTable.setItem(row_index, col_index, item)
 
         else:
@@ -166,6 +168,45 @@ class ProductScreen(QtWidgets.QMainWindow):
             self.msg.show()
 
 
+    def DeleteProduct(self):
+        selected_items = self.productTable.selectedItems()
 
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to delete.")
+            self.msg.show()
+            return
+
+        # Assuming the first column contains a unique identifier (e.g., product_id)
+        selected_row = selected_items[0].row()
+        product_id = int(self.productTable.item(selected_row, 0).text())
+
+        # Code block to check if the productID exists as foreign key in other tables. If yes, then product cannot be deleted
+        check_in_saleproduct = "SELECT COUNT(*) FROM SaleProduct WHERE productID = ?"
+        cursor.execute(check_in_saleproduct, (product_id,))
+        result1 = cursor.fetchone()
+
+        check_in_productsmanufactured = "SELECT COUNT(*) FROM ProductsManufactured WHERE productID = ?"
+        cursor.execute(check_in_productsmanufactured, (product_id,))
+        result2 = cursor.fetchone()
+
+        if (result1 or result2) and (result1[0] > 0 or result2[0] > 0):
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle("Error")
+                self.msg.setText("Cannot delete product with existing records in database.")
+                self.msg.show()
+                return
+
+        sql_query = "delete from Products WHERE productID = ?"
+        cursor.execute(sql_query, (product_id,))
+        connection.commit()
+
+        self.msg = QtWidgets.QMessageBox()
+        self.msg.setWindowTitle("Success")
+        self.msg.setText("Product deleted successfully.")
+        self.msg.show()
+
+        self.PopulateProductTable()
 
     

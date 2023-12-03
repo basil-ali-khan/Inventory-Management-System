@@ -23,11 +23,13 @@ class MaterialScreen(QtWidgets.QMainWindow):
 
         self.editMaterialButton.clicked.connect(self.EditMaterial)
 
-        self.refreshButton.clicked.connect(self.ClearSearch)
+        # self.refreshButton.clicked.connect(self.ClearSearch)
 
         self.addMaterialButton.clicked.connect(self.AddMaterial)
 
         self.clearMaterialButton.clicked.connect(self.ClearMaterialInfo)
+
+        self.deleteMaterialButton.clicked.connect(self.DeleteMaterial)
 
     def ClearMaterialInfo(self):
         self.materialNameBox.setText('')
@@ -192,3 +194,41 @@ class MaterialScreen(QtWidgets.QMainWindow):
             self.msg.setWindowTitle('Error')
             self.msg.setText('Please select search criteria and/or enter search value')
             self.msg.show()
+
+    def DeleteMaterial(self):
+        selected_items = self.materialTable.selectedItems()
+
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to delete.")
+            self.msg.show()
+            return
+
+        # Assuming the first column contains a unique identifier (e.g., vendor_id)
+        selected_row = selected_items[0].row()
+        material_id = int(self.materialTable.item(selected_row, 0).text())
+
+        # Code block to check if the material exists as foreign key in another table.
+        sql_check_material = "select count(*) from PurchaseMaterial where materialID = ?"
+        cursor.execute(sql_check_material, (material_id,))
+        result = cursor.fetchone()
+
+        # Throw error message if customers has pre-existing sales record
+        if result and result[0] > 0:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle("Error")
+                self.msg.setText("Cannot delete material that has been purchased.")
+                self.msg.show()
+                return
+
+        sql_query = "delete from Material WHERE materialID = ?"
+        cursor.execute(sql_query, (material_id))
+        connection.commit()
+
+        self.msg = QtWidgets.QMessageBox()
+        self.msg.setWindowTitle("Success")
+        self.msg.setText("Material deleted successfully.")
+        self.msg.show()
+
+        self.PopulateMaterialTable()  # Update the vendorTable after deletion

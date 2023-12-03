@@ -463,7 +463,7 @@
    <widget class="QPushButton" name="editCustomerButton">
     <property name="geometry">
      <rect>
-      <x>980</x>
+      <x>903</x>
       <y>410</y>
       <width>150</width>
       <height>41</height>
@@ -500,6 +500,66 @@
      <string>Search</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="deleteCustomerButton">
+    <property name="geometry">
+     <rect>
+      <x>1067</x>
+      <y>410</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="topCustomersButton">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>20</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Top Customers</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="customerHistoryButton">
+    <property name="geometry">
+     <rect>
+      <x>920</x>
+      <y>20</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Customer History</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -507,7 +567,7 @@
      <x>0</x>
      <y>0</y>
      <width>1242</width>
-     <height>24</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
