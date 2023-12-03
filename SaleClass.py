@@ -64,23 +64,43 @@ class SaleScreen(QtWidgets.QMainWindow):
         self.addSale.show()
 
     def DeleteSale(self):
+
+        selected_items = self.saleTable.selectedItems ()
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText ("Please select an entry to delete.")
+            self.msg.show()
+            return
+        
         msgBox = QtWidgets.QMessageBox()
-        msgBox.setText("Are you sure you want to delete this Sale?")
+        msgBox.setText("Are you sure you want to delete this sale?")
         msgBox.setWindowTitle("Confirmation Box")
         msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Cancel)
 
         returnValue = msgBox.exec()
 
         if returnValue == QtWidgets.QMessageBox.StandardButton.Ok:
-            selected_row = self.saleTable.currentRow()
-
-            self.saleTable.removeRow(selected_row)
-
-            # sale_id = self.saleTable.item(selected_row, 0).text()
+        
+            selected_row = selected_items[0].row()
+            sale_id = int(self.saleTable.item(selected_row, 0). text())
+            cursor.execute("select * from SaleProduct where saleID = ?", (sale_id,))
             
-            # # Delete the data from the SQL database
-            # cursor.execute(f"DELETE FROM Sale WHERE saleID = ?", sale_id)
-            # connection.commit()
+            for row in cursor.fetchall():
+                Product_id = row[1]
+                quantity = row[2]
+                cursor.execute ("update Product set units = units - (?) where ProductID = ?", (quantity, Product_id,))
+                cursor.execute ("update Product set units = (?) where ProductID = ? and units < 0", (0, Product_id,))
+
+            cursor.execute("delete from saleProduct WHERE saleID = ?", (sale_id,))
+            cursor.execute("delete from sale WHERE saleID = ?", (sale_id,))
+            connection.commit ()
+
+            self.msg = QtWidgets.QMessageBox()
+            self.msg. setWindowTitle ("Success")
+            self.msg.setText ("sale deleted successfully.")
+            self.msg.show()
+            self.PopulatesaleTable()
 
     def SearchSale(self):
         saleID = self.searchSaleId.text() 

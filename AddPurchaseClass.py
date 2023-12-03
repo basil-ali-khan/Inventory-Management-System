@@ -220,11 +220,28 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         cursor = connection.cursor()
 
         if self.MaterialDropDown.currentText() == 'Material ID':
-            search_text = int(self.SearchMaterial_2.text())
-            cursor.execute("SELECT * from Material where materialID = ?", (search_text))
+            try:
+                search_text = int(self.SearchMaterial_2.text())
+                cursor.execute("SELECT * from Material where materialID = ?", (search_text,))
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid integer for Material ID.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
 
         elif self.MaterialDropDown.currentText() == 'Material Name':
-            search_text = str(self.SearchMaterial_2.text())
+            try:
+                search_text = str(self.SearchMaterial_2.text())
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid string for Material Name.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
+
             query = """
                 SELECT * from Material where materialName like (?)
                 """
@@ -243,11 +260,28 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         cursor = connection.cursor()
 
         if self.VendorDropDown.currentText() == 'Vendor ID':
-            search_text = int(self.SearchVendor_2.text())
-            cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text))
+            try:
+                search_text = int(self.SearchVendor_2.text())
+                cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text,))
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid integer for Vendor ID.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
 
         elif self.VendorDropDown.currentText() == 'Vendor Name':
-            search_text = str(self.SearchVendor_2.text())
+            try:
+                search_text = str(self.SearchVendor_2.text())
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid string for Vendor Name.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
+
             query = """
                 SELECT * from Vendor where vendorName like (?)
                 """

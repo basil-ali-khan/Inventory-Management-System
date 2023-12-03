@@ -28,7 +28,7 @@ class ViewSaleScreen(QtWidgets.QMainWindow):
 
         self.ProductTable.itemSelectionChanged.connect(self.get_selected_Product_data)
         self.saveSaleButton.clicked.connect(self.SaveEdit)
-        self.cancelSaleButton.clicked.connect(self.CancelEdit)
+        self.DoneSaleButton.clicked.connect(self.DoneEdit)
 
         self.sale_id = int(sale_id)
         self.sale_date = QDate.fromString(str(sale_date), 'yyyy-MM-dd')
@@ -47,7 +47,7 @@ class ViewSaleScreen(QtWidgets.QMainWindow):
         self.viewCustomerName.setText(str(self.customer_name))
         self.viewCustomerName.setDisabled(True)
 
-        cursor.execute("SELECT Products.ProductName, Products.quanityProduced, SaleProduct.soldprice FROM Sale JOIN SaleProduct ON Sale.saleID = SaleProduct.saleID JOIN Products ON SaleProduct.ProductID = Products.ProductID WHERE Sale.saleID = ?", (sale_id,))
+        cursor.execute("SELECT Products.ProductID, Products.ProductName, SaleProduct.Quantity, SaleProduct.soldprice, SaleProduct.Quantity*SaleProduct.soldprice FROM Sale JOIN SaleProduct ON Sale.saleID = SaleProduct.saleID JOIN Products ON SaleProduct.ProductID = Products.ProductID WHERE Sale.saleID = ?", (sale_id,))
         self.ProductTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
@@ -59,26 +59,28 @@ class ViewSaleScreen(QtWidgets.QMainWindow):
     def get_selected_Product_data(self):
 
         selected_row = self.ProductTable.currentRow()
-        ProductName = self.ProductTable.item(selected_row, 0).text()
-        Quantity = self.ProductTable.item(selected_row, 1).text()
-        Price = self.ProductTable.item(selected_row, 2).text()
-
+        ProductID = self.ProductTable.item(selected_row, 0).text()
+        ProductName = self.ProductTable.item(selected_row, 1).text()
+        Quantity = self.ProductTable.item(selected_row, 2).text()
+        Price = self.ProductTable.item(selected_row, 3).text()
+        
+        self.ProductID.setText(ProductID)
         self.ProductName.setText(ProductName)
         self.Quantity.setText(Quantity)
         self.Price.setText(Price)
 
-    def CancelEdit(self):
+    def DoneEdit(self):
         self.close()
 
     def SaveEdit(self):
 
         SaleId = self.viewSaleId.text()
+        
         Quantity = self.Quantity.text()
         Price = self.Price.text()
         selected_row = self.ProductTable.currentRow()
-        OldQuantity = self.ProductTable.item(selected_row, 1).text()
-        cursor.execute(""" SELECT products.productID FROM products JOIN saleProduct ON products.productID = saleProduct.productID """)
-        ProductID = cursor.fetchone()[0]  # Assuming ProductID is the first column
+        OldQuantity = self.ProductTable.item(selected_row, 2).text()
+        ProductID = self.ProductTable.item(selected_row, 0).text()
 
         sql_query = """
                     UPDATE products
@@ -86,7 +88,15 @@ class ViewSaleScreen(QtWidgets.QMainWindow):
                     WHERE productID = (?)
                     """
 
-        # Correcting the way parameters are passed
+        cursor.execute(sql_query, (OldQuantity, ProductID))
+        connection.commit()
+
+        sql_query = """
+        UPDATE products
+        SET quantitySold = quantitySold - (?)
+        WHERE productID = (?)
+        """
+
         cursor.execute(sql_query, (OldQuantity, ProductID))
         connection.commit()
 
@@ -112,11 +122,19 @@ class ViewSaleScreen(QtWidgets.QMainWindow):
             cursor.execute(sql_query, (Quantity, ProductID))
             connection.commit() 
 
+            sql_query = """
+            UPDATE products
+            SET quantitySold = quantitySold + (?)
+            WHERE productID = (?)
+            """
+
+            cursor.execute(sql_query, (Quantity, ProductID))
+            connection.commit()
+
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle('Success')
             self.msg.setText('Product edit successful')
             self.msg.show()
-            self.close()
 
         else:
 
@@ -125,6 +143,15 @@ class ViewSaleScreen(QtWidgets.QMainWindow):
             SET quanityProduced = quanityProduced - (?)
             WHERE productID = (?)
             """
+            cursor.execute(sql_query, (OldQuantity, ProductID))
+            connection.commit()
+
+            sql_query = """
+            UPDATE products
+            SET quantitySold = quantitySold - (?)
+            WHERE productID = (?)
+            """
+
             cursor.execute(sql_query, (OldQuantity, ProductID))
             connection.commit()
 

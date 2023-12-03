@@ -64,6 +64,15 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         self.addPurchase.show()
 
     def DeletePurchase(self):
+
+        selected_items = self.purchaseTable.selectedItems ()
+        if not selected_items:
+            self.msg = QtWidgets. QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText ("Please select an entry to delete.")
+            self.msg.show()
+            return
+        
         msgBox = QtWidgets.QMessageBox()
         msgBox.setText("Are you sure you want to delete this purchase?")
         msgBox.setWindowTitle("Confirmation Box")
@@ -72,15 +81,26 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         returnValue = msgBox.exec()
 
         if returnValue == QtWidgets.QMessageBox.StandardButton.Ok:
-            selected_row = self.purchaseTable.currentRow()
-
-            self.purchaseTable.removeRow(selected_row)
-
-            # purchase_id = self.purchaseTable.item(selected_row, 0).text()
+        
+            selected_row = selected_items[0].row()
+            purchase_id = int(self.purchaseTable.item(selected_row, 0). text())
+            cursor.execute("select * from PurchaseMaterial where purchaseID = ?", (purchase_id,))
             
-            # # Delete the data from the SQL database
-            # cursor.execute(f"DELETE FROM Purchase WHERE PurchaseID = ?", purchase_id)
-            # connection.commit()
+            for row in cursor.fetchall():
+                material_id = row[1]
+                quantity = row[2]
+                cursor.execute ("update Material set units = units - (?) where materialID = ?", (quantity, material_id,))
+                cursor.execute ("update Material set units = (?) where materialID = ? and units < 0", (0, material_id,))
+
+            cursor.execute("delete from PurchaseMaterial WHERE purchaseID = ?", (purchase_id,))
+            cursor.execute("delete from Purchase WHERE purchaseID = ?", (purchase_id,))
+            connection.commit ()
+
+            self.msg = QtWidgets.QMessageBox()
+            self.msg. setWindowTitle ("Success")
+            self.msg.setText ("Purchase deleted successfully.")
+            self.msg.show()
+            self.PopulatePurchaseTable()
 
     def SearchPurchase(self):
         purchaseId = self.searchPurchaseId.text()

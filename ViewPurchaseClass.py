@@ -28,7 +28,7 @@ class ViewPurchaseScreen(QtWidgets.QMainWindow):
 
         self.MaterialTable.itemSelectionChanged.connect(self.get_selected_material_data)
         self.savePurchaseButton.clicked.connect(self.SaveEdit)
-        self.cancelPurchaseButton.clicked.connect(self.CancelEdit)
+        self.DonePurchaseButton.clicked.connect(self.DoneEdit)
 
         self.purchase_id = int(purchase_id)
         self.purchase_date = QDate.fromString(str(purchase_date), 'yyyy-MM-dd')
@@ -47,7 +47,7 @@ class ViewPurchaseScreen(QtWidgets.QMainWindow):
         self.viewVendorName.setText(str(self.vendor_name))
         self.viewVendorName.setDisabled(True)
 
-        cursor.execute("SELECT Material.materialName, PurchaseMaterial.quantity, PurchaseMaterial.cost FROM PurchaseMaterial JOIN Purchase ON PurchaseMaterial.purchaseID = Purchase.purchaseID JOIN Material ON PurchaseMaterial.materialID = Material.materialID WHERE PurchaseMaterial.purchaseID = ?", (purchase_id,))
+        cursor.execute("SELECT Material.materialName, PurchaseMaterial.quantity, PurchaseMaterial.cost, PurchaseMaterial.quantity*PurchaseMaterial.cost FROM PurchaseMaterial JOIN Purchase ON PurchaseMaterial.purchaseID = Purchase.purchaseID JOIN Material ON PurchaseMaterial.materialID = Material.materialID WHERE PurchaseMaterial.purchaseID = ?", (purchase_id,))
         self.MaterialTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
@@ -68,7 +68,7 @@ class ViewPurchaseScreen(QtWidgets.QMainWindow):
         self.Quantity.setText(Quantity)
         self.UnitCost.setText(UnitCost)
 
-    def CancelEdit(self):
+    def DoneEdit(self):
         self.close()
 
     def SaveEdit(self):
@@ -88,6 +88,4 @@ class ViewPurchaseScreen(QtWidgets.QMainWindow):
         self.msg = QtWidgets.QMessageBox()
         self.msg.setWindowTitle('Success')
         self.msg.setText('Product edit successful')
-
         self.msg.show()
-        self.close()

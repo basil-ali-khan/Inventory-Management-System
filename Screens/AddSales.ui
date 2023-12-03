@@ -54,7 +54,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QDateEdit" name="OrderDate">
+   <widget class="QDateEdit" name="SaleDate">
     <property name="geometry">
      <rect>
       <x>1090</x>
@@ -348,6 +348,11 @@
        <height>31</height>
       </rect>
      </property>
+     <item>
+      <property name="text">
+       <string>Select</string>
+      </property>
+     </item>
      <item>
       <property name="text">
        <string>Product ID</string>
@@ -719,6 +724,11 @@
      </property>
      <item>
       <property name="text">
+       <string>Select</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Customer ID</string>
       </property>
      </item>
@@ -755,7 +765,7 @@
      <string>Order Date</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Clear">
+   <widget class="QPushButton" name="ClearSale">
     <property name="geometry">
      <rect>
       <x>1090</x>
