@@ -6,11 +6,11 @@ from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget,
 import sys
 import pyodbc
 from AddPurchaseClass import AddPurchaseScreen
-from ViewPurchaseClass import ViewPurchaseScreen
+from ViewEditPurchaseClass import ViewEditPurchaseScreen
 
 # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-server = 'LAPTOP-MNMD5RBU'
-database = 'Inventory_Management_System_Script'  # Name of your Northwind database
+server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+database = 'Inventory_Management_System'  # Name of your Northwind database
 use_windows_authentication = True  # Set to True to use Windows Authentication
 username = 'your_username'  # Specify a username if not using Windows Authentication
 password = 'your_password'  # Specify a password if not using Windows Authentication
@@ -35,6 +35,7 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         self.addPurchaseButton.clicked.connect(self.AddPurchase)
         self.deletePurchaseButton.clicked.connect(self.DeletePurchase)
         self.searchPurchaseButton.clicked.connect(self.SearchPurchase)
+        self.refreshButton.clicked.connect(self.PopulatePurchaseTable)
 
     def PopulatePurchaseTable(self):
 
@@ -56,8 +57,9 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         total_amount = int(self.purchaseTable.item(selected_row, 2).text()) 
         vendor_name = str(self.purchaseTable.item(selected_row, 3).text())
 
-        self.viewPurchase = ViewPurchaseScreen(purchase_id, purchase_date, total_amount, vendor_name)
-        self.viewPurchase.show()
+        self.viewEditPurchase = ViewEditPurchaseScreen(purchase_id, purchase_date, total_amount, vendor_name)
+        self.viewEditPurchase.editDone.connect(self.PopulatePurchaseTable)
+        self.viewEditPurchase.show()
             
     def AddPurchase(self):
         self.addPurchase = AddPurchaseScreen()

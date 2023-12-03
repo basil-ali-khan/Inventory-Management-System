@@ -7,8 +7,8 @@ import sys
 import pyodbc
 
 # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-server = 'LAPTOP-MNMD5RBU'
-database = 'Inventory_Management_System_Script'  # Name of your Northwind database
+server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+database = 'Inventory_Management_System'  # Name of your Northwind database
 use_windows_authentication = True  # Set to True to use Windows Authentication
 username = 'your_username'  # Specify a username if not using Windows Authentication
 password = 'your_password'  # Specify a password if not using Windows Authentication
@@ -21,9 +21,10 @@ else:
 connection = pyodbc.connect(connection_string)
 cursor = connection.cursor()
 
-class ViewPurchaseScreen(QtWidgets.QMainWindow):
+class ViewEditPurchaseScreen(QtWidgets.QMainWindow):
+    editDone = QtCore.pyqtSignal()
     def __init__(self, purchase_id, purchase_date, total_amount, vendor_name):
-        super(ViewPurchaseScreen, self).__init__() 
+        super(ViewEditPurchaseScreen, self).__init__() 
         uic.loadUi("Screens/ViewPurchase.ui", self)
 
         self.MaterialTable.itemSelectionChanged.connect(self.get_selected_material_data)
@@ -69,23 +70,48 @@ class ViewPurchaseScreen(QtWidgets.QMainWindow):
         self.UnitCost.setText(UnitCost)
 
     def DoneEdit(self):
+        self.editDone.emit()
         self.close()
 
+    def UpdateTotal(self):
+        total = 0
+        for i in range(self.MaterialTable.rowCount()):
+            total += int(self.MaterialTable.item(i, 3).text())
+        self.viewTotalAmount.setText(str(total))
+
     def SaveEdit(self):
+        selected_row = self.MaterialTable.currentRow()
+        
         PurchaseID = self.viewPurchaseId.text()
         Quantity = self.Quantity.text()
         UnitCost = self.UnitCost.text()
+        total = int(Quantity) * int(UnitCost)
+
+        self.MaterialTable.item(selected_row, 1).setText(str(Quantity))
+        self.MaterialTable.item(selected_row, 2).setText(str(UnitCost))
+        self.MaterialTable.item(selected_row, 3).setText(str(total))
+
+        self.UpdateTotal()
 
         sql_query = """
                     update PurchaseMaterial
                     set quantity = (?), cost = (?)
-                    WHERE purchaseID = (?)
+                    WHERE purchaseID = (?) and materialID = (select materialID from Material where materialName = ?)
                     """
         
-        cursor.execute(sql_query, (Quantity, UnitCost, PurchaseID))
+        cursor.execute(sql_query, (Quantity, UnitCost, PurchaseID, self.MaterialName.text()))
+        connection.commit()
+
+        sql_query = """
+                    update Purchase
+                    set totalAmount = (select sum(quantity * cost) from PurchaseMaterial where purchaseID = ?)
+                    WHERE purchaseID = (?)
+                    """
+        cursor.execute(sql_query, (PurchaseID, PurchaseID))
         connection.commit()
 
         self.msg = QtWidgets.QMessageBox()
         self.msg.setWindowTitle('Success')
         self.msg.setText('Product edit successful')
         self.msg.show()
+        
