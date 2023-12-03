@@ -13,7 +13,6 @@ class EditVendorScreen(QtWidgets.QMainWindow):
         super(EditVendorScreen, self).__init__()
         uic.loadUi('Screens/EditVendors.ui', self)
 
-        # Assuming your UI file has QLineEdit widgets named vendorNameEdit, contactNumberEdit, emailEdit, addressEdit
         self.nameText.setText(vendor_data[1])
         self.contactText.setText(vendor_data[2])
         self.backupText.setText(vendor_data[3])
