@@ -118,6 +118,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         quantity = self.Quantity.text()
         vendor_id = self.VendorID.text()
         vendor_name = self.VendorName.text()
+        total = int(quantity)*int(unit_cost)
 
         # Check the condition
         if (
@@ -139,17 +140,19 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
             self.purchaseDetailsTable.insertRow(row_position)
 
             self.purchaseDetailsTable.setItem(
-                row_position, 0, QTableWidgetItem(self.MaterialID.text()))
+                row_position, 0, QTableWidgetItem(material_id))
             self.purchaseDetailsTable.setItem(
-                row_position, 1, QTableWidgetItem(self.MaterialName.text()))
+                row_position, 1, QTableWidgetItem(material_name))
             self.purchaseDetailsTable.setItem(
-                row_position, 2, QTableWidgetItem(self.VendorID.text()))        
+                row_position, 2, QTableWidgetItem(vendor_id))        
             self.purchaseDetailsTable.setItem(
-                row_position, 3, QTableWidgetItem(self.VendorName.text()))
+                row_position, 3, QTableWidgetItem(vendor_name))
             self.purchaseDetailsTable.setItem(
-                row_position, 4, QTableWidgetItem(self.UnitCost.text()))
+                row_position, 4, QTableWidgetItem(unit_cost))
             self.purchaseDetailsTable.setItem(
-                row_position, 5, QTableWidgetItem(self.Quantity.text()))
+                row_position, 5, QTableWidgetItem(quantity))
+            self.purchaseDetailsTable.setItem(
+                row_position, 6, QTableWidgetItem(str(total)))            
 
             self.MaterialID.setText("")
             self.MaterialName.setText("")
@@ -198,6 +201,17 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
                     """
             cursor.execute(sql_query, (int(PurchaseID), int(MaterialID), int(Quantity), int(UnitCost)))
             connection.commit()
+
+            TotalAmount = TotalAmount + (Quantity*UnitCost)
+
+        sql_query = """
+                    UPDATE Purchase
+                    SET totalAmount = ?
+                    WHERE purchaseid = (?)
+                    """
+
+        cursor.execute(sql_query, (TotalAmount, PurchaseID))
+        connection.commit()
 
         QtWidgets.QMessageBox.information(
             self, "Purchase Added", f"Purchase ID: {PurchaseID} has been added successfully.")

@@ -134,6 +134,7 @@ class AddSaleScreen(QtWidgets.QMainWindow):
         contact_number = self.ContactNumber.text()
         backup_contact_number = self.BackupContactNumber.text()
         email = self.Email.text()
+        total = int(price)*int(quantity)
 
         if (
             product_id == ""
@@ -165,19 +166,21 @@ class AddSaleScreen(QtWidgets.QMainWindow):
                 self.SaleDetailsTable.insertRow(row_position)
 
                 self.SaleDetailsTable.setItem(
-                    row_position, 0, QTableWidgetItem(self.ProductID.text()))
+                    row_position, 0, QTableWidgetItem(product_id))
                 self.SaleDetailsTable.setItem(
-                    row_position, 1, QTableWidgetItem(self.ProductName.text()))
+                    row_position, 1, QTableWidgetItem(product_name))
                 self.SaleDetailsTable.setItem(
-                    row_position, 2, QTableWidgetItem(self.CustomerID.text()))        
+                    row_position, 2, QTableWidgetItem(customer_id))        
                 self.SaleDetailsTable.setItem(
-                    row_position, 3, QTableWidgetItem(self.CustomerName.text()))
+                    row_position, 3, QTableWidgetItem(customer_name))
                 self.SaleDetailsTable.setItem(
-                    row_position, 4, QTableWidgetItem(self.Quantity.text()))
+                    row_position, 4, QTableWidgetItem(quantity))
                 self.SaleDetailsTable.setItem(
-                    row_position, 5, QTableWidgetItem(self.Price.text()))
+                    row_position, 5, QTableWidgetItem(price))
                 self.SaleDetailsTable.setItem(
-                    row_position, 6, QTableWidgetItem(self.Discount.text()))
+                    row_position, 6, QTableWidgetItem(discount))
+                self.SaleDetailsTable.setItem(
+                    row_position, 7, QTableWidgetItem(str(total)))
             
                 self.ProductID.setText("")
                 self.ProductName.setText("")
@@ -199,7 +202,7 @@ class AddSaleScreen(QtWidgets.QMainWindow):
         cursor.execute("SELECT max(saleID) AS SaleID from Sale")
         result = cursor.fetchone()
         SaleID = result[0]+1
-        UserID = 0
+        UserID = 2
 
         SaleDate = self.SaleDate.date().toString("yyyy-MM-dd")
 
@@ -228,8 +231,8 @@ class AddSaleScreen(QtWidgets.QMainWindow):
 
             sql_query = """
                         INSERT INTO [SaleProduct]
-                        ([Saleid], [ProductID], [quantity], [cost], [discount])
-                        VALUES (?, ?, ?, ?)
+                        ([Saleid], [ProductID], [quantity], [soldPrice], [discount])
+                        VALUES (?, ?, ?, ?, ?)
                     """
             cursor.execute(sql_query, (int(SaleID), int(ProductID), int(Quantity), int(Price), int(Discount)))
             connection.commit()
@@ -241,6 +244,17 @@ class AddSaleScreen(QtWidgets.QMainWindow):
             """
             cursor.execute(sql_query, (Quantity, ProductID))
             connection.commit()
+
+            TotalAmount += Quantity*Price
+
+        sql_query = """
+                    UPDATE Sale
+                    SET totalAmount = ?
+                    WHERE saleID = (?)
+                    """
+
+        cursor.execute(sql_query, (TotalAmount, SaleID))
+        connection.commit()
 
         QtWidgets.QMessageBox.information(
             self, "Sale Added", f"Sale ID: {SaleID} has been added successfully.")
