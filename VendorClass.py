@@ -337,3 +337,5 @@ class VendorScreen(QtWidgets.QMainWindow):
         self.vendorHistory = VendorHistoryScreen(vendor_id, vendor_name, contact, backup_contact, email, address)
         self.vendorHistory.show()
 
+        
+

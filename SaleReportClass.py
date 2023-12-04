@@ -14,12 +14,12 @@ class SaleReportScreen(QtWidgets.QMainWindow):
 
         self.generateButton.clicked.connect(self.GenerateReport)
         self.moneytext.setReadOnly(True)
-        self.customerText.setReadOnly(True)
+        self.itemText.setReadOnly(True)
 
         self.moneyfrom.setEnabled(False)
         self.moneyto.setEnabled(False)
-        self.customerfrom.setEnabled(False)
-        self.customerto.setEnabled(False)
+        self.itemFrom.setEnabled(False)
+        self.itemTo.setEnabled(False)
 
         self.radioButton_2.toggled.connect(self.toggleMoneyDateFields)
         self.radioButton_4.toggled.connect(self.toggleCustomerDateFields)
@@ -31,53 +31,60 @@ class SaleReportScreen(QtWidgets.QMainWindow):
 
     def toggleCustomerDateFields(self):
         # Enable/disable vendor date fields based on the state of radioButton_4
-        self.customerfrom.setEnabled(self.radioButton_4.isChecked())
-        self.customerto.setEnabled(self.radioButton_4.isChecked())
+        self.itemFrom.setEnabled(self.radioButton_4.isChecked())
+        self.itemTo.setEnabled(self.radioButton_4.isChecked())
 
     def GenerateReport(self):
-        if (not self.radioButton.isChecked() and not self.radioButton_2.isChecked()) or (not self.radioButton_3.isChecked() and not self.radioButton_4.isChecked()):
+        if (not self.radioButton.isChecked() and not self.radioButton_2.isChecked() and not self.radioButton_3.isChecked() and not self.radioButton_4.isChecked()):
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle("Error")
             self.msg.setText("Please select the timeframe.")
             self.msg.show()
             return
 
+        # for best selling item all time
+
         if self.radioButton_3.isChecked():
-            query = f"""
-                SELECT STRING_AGG(customerName, ', ') as customerNames
-                FROM Customer
-                WHERE customerID IN (
-                    SELECT TOP 1 WITH TIES customerID
-                    FROM Sale
-                    GROUP BY customerID
-                    ORDER BY COUNT(*) DESC
-                )
+            query = """
+                SELECT STRING_AGG(productInfo, CHAR(13) + CHAR(10)) as BestSellingProducts
+                FROM (
+                    SELECT TOP 1 WITH TIES
+                        productName + ' (Description: ' + description + ', Quantity: ' + CAST(SUM(quantity) AS NVARCHAR) + ')' as productInfo
+                    FROM Sale S
+                    JOIN SaleProduct SP ON S.saleID = SP.saleID
+                    JOIN Products P ON SP.productID = P.productID
+                    GROUP BY productName, description
+                    ORDER BY SUM(quantity) DESC
+                ) AS BestSellingProductsSubquery
             """
 
             cursor.execute(query)
             result = cursor.fetchone()
-            self.customerText.setText(
+            self.itemText.setText(
                 str(result[0]) if result and result[0] is not None else "N/A")
 
-        if self.radioButton_4.isChecked():
-            customer_from_date = self.customerfrom.date().toString("yyyy-MM-dd")
-            customer_to_date = self.customerto.date().toString("yyyy-MM-dd")
+        # for best selling item within a specific timeframe
 
-            # Query to find the most frequented vendor within the specified time frame
+        if self.radioButton_4.isChecked():
+            item_from_date = self.itemFrom.date().toString("yyyy-MM-dd")
+            item_to_date = self.itemTo.date().toString("yyyy-MM-dd")
+
             query = f"""
-                SELECT STRING_AGG(customerName, ', ') as customerNames
-                FROM Customer
-                WHERE customerID IN (
-                    SELECT TOP 1 WITH TIES customerID
-                    FROM Sale
-                    WHERE saleDate BETWEEN '{customer_from_date}' AND '{customer_to_date}'
-                    GROUP BY customerID
-                    ORDER BY COUNT(*) DESC
-                )
+                SELECT STRING_AGG(productInfo, CHAR(13) + CHAR(10)) as BestSellingProducts
+                FROM (
+                    SELECT TOP 1 WITH TIES
+                        productName + ' (Description: ' + description + ', Quantity: ' + CAST(SUM(quantity) AS NVARCHAR) + ')' as productInfo
+                    FROM Sale S
+                    JOIN SaleProduct SP ON S.saleID = SP.saleID
+                    JOIN Products P ON SP.productID = P.productID
+                    WHERE S.saleDate BETWEEN '{item_from_date}' AND '{item_to_date}'
+                    GROUP BY productName, description
+                    ORDER BY SUM(quantity) DESC
+                ) AS BestSellingProductsSubquery
             """
             cursor.execute(query)
             result = cursor.fetchone()
-            self.customerText.setText(
+            self.itemText.setText(
                 str(result[0]) if result and result[0] is not None else "N/A")
 
         if self.radioButton.isChecked():
