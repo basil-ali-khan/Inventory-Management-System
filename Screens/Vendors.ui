@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1202</width>
+    <width>1174</width>
     <height>519</height>
    </rect>
   </property>
@@ -363,7 +363,7 @@
      <rect>
       <x>20</x>
       <y>0</y>
-      <width>1271</width>
+      <width>1141</width>
       <height>20</height>
      </rect>
     </property>
@@ -431,14 +431,54 @@
      <string>Delete</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="topVendorsButton">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>20</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Top Vendors</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="VendorHistoryButton">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>20</y>
+      <width>150</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Vendor History</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1202</width>
-     <height>24</height>
+     <width>1174</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
