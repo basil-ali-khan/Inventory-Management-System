@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>364</width>
-    <height>533</height>
+    <width>904</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>340</width>
+      <width>880</width>
       <height>31</height>
      </rect>
     </property>
@@ -39,7 +39,7 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>340</width>
+      <width>880</width>
       <height>31</height>
      </rect>
     </property>
@@ -79,8 +79,8 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>341</width>
-      <height>131</height>
+      <width>570</width>
+      <height>441</height>
      </rect>
     </property>
     <property name="title">
@@ -99,10 +99,10 @@
       <string>Sales Revenue:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="moneytext">
+    <widget class="QLineEdit" name="revenueText">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>200</x>
        <y>10</y>
        <width>171</width>
        <height>21</height>
@@ -113,7 +113,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
+       <y>50</y>
        <width>70</width>
        <height>13</height>
       </rect>
@@ -122,11 +122,11 @@
       <string>Timeframe:</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton">
+    <widget class="QRadioButton" name="radioButton_allTime">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>40</y>
+       <x>200</x>
+       <y>50</y>
        <width>82</width>
        <height>17</height>
       </rect>
@@ -135,25 +135,38 @@
       <string>All Time</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_2">
+    <widget class="QRadioButton" name="radioButton_yearly">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>60</y>
+       <x>200</x>
+       <y>70</y>
+       <width>82</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Yearly</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_monthly">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>70</y>
        <width>82</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>Specific</string>
+      <string>Monthly</string>
      </property>
     </widget>
-    <widget class="QDateEdit" name="moneyto">
+    <widget class="QDateEdit" name="dateEdit">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>90</y>
-       <width>101</width>
+       <x>200</x>
+       <y>110</y>
+       <width>171</width>
        <height>22</height>
       </rect>
      </property>
@@ -161,53 +174,50 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="label_11">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>90</y>
-       <width>55</width>
-       <height>16</height>
+       <x>10</x>
+       <y>110</y>
+       <width>70</width>
+       <height>13</height>
       </rect>
      </property>
      <property name="text">
-      <string>From:</string>
+      <string>Date:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_6">
+    <widget class="QTableWidget" name="revenueTable">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>90</y>
-       <width>21</width>
-       <height>16</height>
+       <x>10</x>
+       <y>150</y>
+       <width>550</width>
+       <height>240</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="generateRevenueButton">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>402</y>
+       <width>141</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>To:</string>
+      <string>Generate</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QDateEdit" name="moneyfrom">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>170</y>
-      <width>101</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="calendarPopup">
-     <bool>true</bool>
-    </property>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>230</y>
-      <width>341</width>
-      <height>221</height>
+      <x>590</x>
+      <y>80</y>
+      <width>301</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="title">
@@ -223,14 +233,14 @@
       </rect>
      </property>
      <property name="text">
-      <string>Most Frequent Customer:</string>
+      <string>Most Sold Item:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>120</y>
+       <y>140</y>
        <width>70</width>
        <height>13</height>
       </rect>
@@ -242,8 +252,8 @@
     <widget class="QRadioButton" name="radioButton_3">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>120</y>
+       <x>120</x>
+       <y>140</y>
        <width>82</width>
        <height>17</height>
       </rect>
@@ -255,7 +265,7 @@
     <widget class="QRadioButton" name="radioButton_4">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>210</x>
        <y>140</y>
        <width>82</width>
        <height>20</height>
@@ -265,11 +275,11 @@
       <string>Specific</string>
      </property>
     </widget>
-    <widget class="QDateEdit" name="customerto">
+    <widget class="QDateEdit" name="itemTo">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>170</y>
+       <x>190</x>
+       <y>200</y>
        <width>101</width>
        <height>22</height>
       </rect>
@@ -281,8 +291,8 @@
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>170</y>
+       <x>120</x>
+       <y>230</y>
        <width>55</width>
        <height>16</height>
       </rect>
@@ -294,8 +304,8 @@
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>170</y>
+       <x>120</x>
+       <y>200</y>
        <width>21</width>
        <height>16</height>
       </rect>
@@ -304,11 +314,11 @@
       <string>To:</string>
      </property>
     </widget>
-    <widget class="QDateEdit" name="customerfrom">
+    <widget class="QDateEdit" name="itemFrom">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>170</y>
+       <x>190</x>
+       <y>230</y>
        <width>101</width>
        <height>22</height>
       </rect>
@@ -317,29 +327,42 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="customerText">
+    <widget class="QTextBrowser" name="itemText">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>120</x>
        <y>10</y>
        <width>171</width>
        <height>111</height>
       </rect>
      </property>
     </widget>
-   </widget>
-   <widget class="QPushButton" name="generateButton">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>460</y>
-      <width>141</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Generate</string>
-    </property>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>70</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Date:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="generateItemButton">
+     <property name="geometry">
+      <rect>
+       <x>79</x>
+       <y>269</y>
+       <width>141</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Generate</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -347,8 +370,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>364</width>
-     <height>21</height>
+     <width>904</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>
