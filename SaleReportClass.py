@@ -5,14 +5,13 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidge
 
 from ConnectionString import connection, cursor
 
-
 class SaleReportScreen(QtWidgets.QMainWindow):
     def __init__(self):
         super(SaleReportScreen, self).__init__()
 
         uic.loadUi('Screens/SaleReport.ui', self)
 
-        self.generateButton.clicked.connect(self.GenerateReport)
+        self.generateItemButton.clicked.connect(self.GenerateReport)
         self.moneytext.setReadOnly(True)
         self.itemText.setReadOnly(True)
 

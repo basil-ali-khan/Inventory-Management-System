@@ -223,7 +223,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Most Sold Item:</string>
+      <string>Most Frequent Customer:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -265,7 +265,7 @@
       <string>Specific</string>
      </property>
     </widget>
-    <widget class="QDateEdit" name="itemTo">
+    <widget class="QDateEdit" name="customerto">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -304,7 +304,7 @@
       <string>To:</string>
      </property>
     </widget>
-    <widget class="QDateEdit" name="itemFrom">
+    <widget class="QDateEdit" name="customerfrom">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -317,7 +317,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="itemText">
+    <widget class="QTextBrowser" name="customerText">
      <property name="geometry">
       <rect>
        <x>160</x>
@@ -348,7 +348,7 @@
      <x>0</x>
      <y>0</y>
      <width>364</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
