@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
+    <width>614</width>
     <height>681</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>481</width>
+      <width>591</width>
       <height>431</height>
      </rect>
     </property>
@@ -40,9 +40,6 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="viewPurchaseId">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -110,7 +107,7 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>260</x>
        <y>370</y>
        <width>91</width>
        <height>16</height>
@@ -123,7 +120,7 @@
     <widget class="QLineEdit" name="viewTotalAmount">
      <property name="geometry">
       <rect>
-       <x>170</x>
+       <x>230</x>
        <y>390</y>
        <width>141</width>
        <height>31</height>
@@ -138,9 +135,12 @@
       <rect>
        <x>20</x>
        <y>100</y>
-       <width>441</width>
+       <width>561</width>
        <height>261</height>
       </rect>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <row>
       <property name="text">
@@ -202,6 +202,11 @@
        <string>Cost</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Total</string>
+      </property>
+     </column>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
@@ -209,7 +214,7 @@
      <rect>
       <x>10</x>
       <y>450</y>
-      <width>481</width>
+      <width>591</width>
       <height>101</height>
      </rect>
     </property>
@@ -219,7 +224,7 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>380</x>
+       <x>350</x>
        <y>20</y>
        <width>101</width>
        <height>21</height>
@@ -232,7 +237,7 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>240</x>
        <y>20</y>
        <width>101</width>
        <height>21</height>
@@ -243,11 +248,14 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="MaterialName">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>50</y>
-       <width>211</width>
+       <width>200</width>
        <height>31</height>
       </rect>
      </property>
@@ -266,7 +274,7 @@
       <rect>
        <x>230</x>
        <y>50</y>
-       <width>111</width>
+       <width>90</width>
        <height>31</height>
       </rect>
      </property>
@@ -283,9 +291,9 @@
     <widget class="QLineEdit" name="UnitCost">
      <property name="geometry">
       <rect>
-       <x>350</x>
+       <x>340</x>
        <y>50</y>
-       <width>121</width>
+       <width>80</width>
        <height>31</height>
       </rect>
      </property>
@@ -302,7 +310,7 @@
     <widget class="QLabel" name="MaterialName_2">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>90</x>
        <y>20</y>
        <width>101</width>
        <height>21</height>
@@ -312,31 +320,31 @@
       <string>Material Name</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="savePurchaseButton">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>50</y>
+       <width>120</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QPushButton" name="savePurchaseButton">
+   <widget class="QPushButton" name="DonePurchaseButton">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>220</x>
       <y>560</y>
       <width>181</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
-     <string>Save</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="cancelPurchaseButton">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>560</y>
-      <width>181</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Cancel</string>
+     <string>Close</string>
     </property>
    </widget>
   </widget>
@@ -345,7 +353,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>501</width>
+     <width>614</width>
      <height>26</height>
     </rect>
    </property>

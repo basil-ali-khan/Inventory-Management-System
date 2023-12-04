@@ -7,6 +7,8 @@ import pyodbc
 import EditVendorClass
 
 from ConnectionString import connection, cursor
+from TopVendorClass import TopVendorScreen
+from VendorHistoryClass import VendorHistoryScreen
 
 
 class VendorScreen(QtWidgets.QMainWindow):
@@ -23,6 +25,32 @@ class VendorScreen(QtWidgets.QMainWindow):
         self.editVendorButton.clicked.connect(self.EditVendor)
         self.searchVendorButton.clicked.connect(self.SearchVendor)
         self.deleteVendorButton.clicked.connect(self.DeleteVendor)
+        self.VendorHistoryButton.clicked.connect(self.OpenVendorHistoryScreen)
+        self.topVendorsButton.clicked.connect(self.OpenTopVendorsScreen)
+    def OpenTopVendorsScreen(self):
+        self.topvendors = TopVendorScreen()
+        self.topvendors.show()
+    
+    def OpenVendorHistoryScreen(self):
+        selected_items = self.vendorTable.selectedItems()
+
+        if not selected_items:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText("Please select an entry to view history.")
+            self.msg.show()
+            return
+
+        selected_row = selected_items[0].row()
+        vendor_id = int(self.vendorTable.item(selected_row, 0).text())
+        vendor_name = self.vendorTable.item(selected_row, 1).text()
+        contact = self.vendorTable.item(selected_row, 2).text()
+        backup_contact = self.vendorTable.item(selected_row, 3).text()
+        email = self.vendorTable.item(selected_row, 4).text()
+        address = self.vendorTable.item(selected_row, 5).text()
+
+        self.vendorHistory = VendorHistoryScreen(vendor_id, vendor_name, contact, backup_contact, email, address)
+        self.vendorHistory.show()
 
     def PopulateVendorTable(self):
         cursor.execute("select * from vendor")

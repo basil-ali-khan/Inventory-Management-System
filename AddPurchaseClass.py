@@ -2,16 +2,29 @@
 import typing
 from PyQt6 import QtCore, QtWidgets, uic
 from PyQt6.QtCore import QDate
-from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
+from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView
 import sys
 import pyodbc
 
-from MaterialClass import MaterialScreen
-from VendorClass import VendorScreen
+# # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+# server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+# database = 'Inventory_Management_System'   # Name of your Northwind database
+# use_windows_authentication = True  # Set to True to use Windows Authentication
+# username = 'your_username'  # Specify a username if not using Windows Authentication
+# password = 'your_password'  # Specify a password if not using Windows Authentication
+
+# if use_windows_authentication:
+#     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
+# else:
+#     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+
+# connection = pyodbc.connect(connection_string)
+# cursor = connection.cursor()
 
 from ConnectionString import connection, cursor
 
 class AddPurchaseScreen(QtWidgets.QMainWindow):
+    purchaseAdded = QtCore.pyqtSignal()
     def __init__(self):
         super(AddPurchaseScreen, self).__init__()
         uic.loadUi("Screens/AddPurchase.ui", self)
@@ -27,24 +40,12 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorID.setDisabled(True)
         self.VendorName.setDisabled(True)
 
-        self.AddMaterialVendor.clicked.connect(self.add_material)
+        self.AddMaterialVendor.clicked.connect(self.add_material_vendor)
         self.AddPurchase.clicked.connect(self.add_purchase)
         self.ClearPurchase.clicked.connect(self.clear)
         self.SearchMaterial.clicked.connect(self.search_material)
         self.SearchVendor.clicked.connect(self.search_vendor)
-        self.addMaterialButton.clicked.connect(self.add_new_material)
-        self.addVendorButton.clicked.connect(self.add_vendor)
-        self.refreshMaterialButton.clicked.connect(self.PopulateMaterialTable)
-        self.refreshVendorButton.clicked.connect(self.PopulateVendorTable)
-
-
-    def add_new_material(self):
-        self.addMaterialScreen = MaterialScreen()
-        self.addMaterialScreen.show()
-    
-    def add_vendor(self):
-        self.addVendorScreen = VendorScreen()
-        self.addVendorScreen.show()
+        
 
     def PopulateMaterialTable(self):
 
@@ -112,65 +113,78 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
             error_message = "Error: No row is selected."
             QMessageBox.critical(self, "Error", error_message)
 
-    def add_material(self):
+    def add_material_vendor(self):
+        # Get text from line edits
+        material_id = self.MaterialID.text()
+        material_name = self.MaterialName.text()
+        unit_cost = self.UnitCost.text()
+        quantity = self.Quantity.text()
+        vendor_id = self.VendorID.text()
+        vendor_name = self.VendorName.text()
+        # total = int(quantity)*int(unit_cost)
 
-        if self.MaterialID.text() == '' or self.MaterialName.text() == '' or self.UnitCost.text() == '' or self.Quantity.text() == '' or self.VendorID.text() == '' or self.VendorName.text() == '':
-            self.msgBox = QtWidgets.QMessageBox()
-            self.msgBox.setText("Please Select All Required Attributes!")
-            self.msgBox.setWindowTitle("Confirmation Box")
-            self.msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
-            self.msgBox.show()
+        # Check the condition
+        if (
+            material_id == ""
+            or material_name == ""
+            or unit_cost == ""
+            or quantity == ""
+            or vendor_id == ""
+            or vendor_name == ""
+        ):
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please Enter All Required Attributes!")
+            msgBox.setWindowTitle("Confirmation Box")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+        elif not quantity.isdigit() or int(quantity) <= 0 or (unit_cost.isdigit() == False):
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please Enter a valid quantity and unit cost!")
+            msgBox.setWindowTitle("Error")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
 
         else:
+            self.vendorTable.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+            total = int(quantity)*int(unit_cost)
             row_position = self.purchaseDetailsTable.rowCount()
             self.purchaseDetailsTable.insertRow(row_position)
 
-            if (self.UnitCost.text().isdigit() and self.Quantity.text().isdigit()):
-
-                self.purchaseDetailsTable.setItem(
-                    row_position, 0, QTableWidgetItem(self.MaterialID.text()))
-                self.purchaseDetailsTable.setItem(
-                    row_position, 1, QTableWidgetItem(self.MaterialName.text()))
-                self.purchaseDetailsTable.setItem(
-                    row_position, 2, QTableWidgetItem(self.VendorID.text()))        
-                self.purchaseDetailsTable.setItem(
-                    row_position, 3, QTableWidgetItem(self.VendorName.text()))
-                self.purchaseDetailsTable.setItem(
-                    row_position, 4, QTableWidgetItem(self.UnitCost.text()))
-                self.purchaseDetailsTable.setItem(
-                    row_position, 5, QTableWidgetItem(self.Quantity.text()))
-                
-            else:
-                self.msgBox = QtWidgets.QMessageBox()
-                self.msgBox.setText('Unit Price and Quantity should be numeric')
-                self.msgBox.setWindowTitle('Error')
-                self.msgBox.show()
+            self.purchaseDetailsTable.setItem(
+                row_position, 0, QTableWidgetItem(material_id))
+            self.purchaseDetailsTable.setItem(
+                row_position, 1, QTableWidgetItem(material_name))
+            self.purchaseDetailsTable.setItem(
+                row_position, 2, QTableWidgetItem(vendor_id))        
+            self.purchaseDetailsTable.setItem(
+                row_position, 3, QTableWidgetItem(vendor_name))
+            self.purchaseDetailsTable.setItem(
+                row_position, 4, QTableWidgetItem(unit_cost))
+            self.purchaseDetailsTable.setItem(
+                row_position, 5, QTableWidgetItem(quantity))
+            self.purchaseDetailsTable.setItem(
+                row_position, 6, QTableWidgetItem(str(total)))            
 
             self.MaterialID.setText("")
             self.MaterialName.setText("")
             self.UnitCost.setText("")
             self.Quantity.setText("")
-            self.VendorID.setText("")
-            self.VendorName.setText("")
+            # self.VendorID.setText("")
+            # self.VendorName.setText("")
 
     def add_purchase(self):
+        
 
-        connection = pyodbc.connect(connection_string)
-        cursor = connection.cursor()
-
-        cursor.execute("SELECT max(purchaseid) AS PurchaseID from Purchase")
-        result = cursor.fetchone()
-        PurchaseID = result[0]+1
+        self.PurchaseDate.setDate(QDate.currentDate())
 
         PurchaseDate = self.PurchaseDate.date().toString("yyyy-MM-dd")
 
         num_rows = self.purchaseDetailsTable.rowCount()
         TotalAmount = 0
         for row in range(num_rows):
-            TotalAmount = TotalAmount + int(self.purchaseDetailsTable.item(row, 4).text()) * int(self.purchaseDetailsTable.item(row, 5).text())
+            TotalAmount += (int(self.purchaseDetailsTable.item(row, 4).text()) * int(self.purchaseDetailsTable.item(row, 5).text()))
 
-        VendorID = int(self.purchaseDetailsTable.item(row, 2).text())
-
+        VendorID = self.VendorID.text()
         sql_query = """
             INSERT INTO [Purchase]
             ([purchaseDate], [totalAmount], [vendorID])
@@ -179,10 +193,14 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         cursor.execute(sql_query, (PurchaseDate, int(TotalAmount), int(VendorID)))
         connection.commit()
 
+        cursor.execute("SELECT max(purchaseid) AS PurchaseID from Purchase")
+        result = cursor.fetchone()
+        PurchaseID = result[0]
+
         for row in range(num_rows):
 
             MaterialID = int(self.purchaseDetailsTable.item(row, 0).text())
-            VendorID = int(self.purchaseDetailsTable.item(row, 2).text())
+            # VendorID = int(self.purchaseDetailsTable.item(row, 2).text())
             UnitCost = int(self.purchaseDetailsTable.item(row, 4).text())
             Quantity = int(self.purchaseDetailsTable.item(row, 5).text())
 
@@ -191,14 +209,34 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
                         ([purchaseid], [materialID], [quantity], [cost])
                         VALUES (?, ?, ?, ?)
                     """
-            cursor.execute(sql_query, (int(PurchaseID), int(MaterialID), int(Quantity), int(UnitCost)))
+            
+            cursor.execute(sql_query, (PurchaseID, MaterialID, Quantity, UnitCost))
             connection.commit()
+            
+            # TotalAmount = TotalAmount + (Quantity*UnitCost)
+
+        # sql_query = """
+        #             UPDATE Purchase
+        #             SET totalAmount = ?
+        #             WHERE purchaseid = (?)
+        #             """
+
+        # cursor.execute(sql_query, (TotalAmount, PurchaseID))
+        # connection.commit()
+        # sql_query = """
+        #     INSERT INTO [Purchase]
+        #     ([purchaseDate], [totalAmount], [vendorID])
+        #     VALUES (?, ?, ?)
+        # """
+        # cursor.execute(sql_query, (PurchaseDate, int(TotalAmount), int(VendorID)))
+        # connection.commit()
 
         QtWidgets.QMessageBox.information(
             self, "Purchase Added", f"Purchase ID: {PurchaseID} has been added successfully.")
+        
+        self.purchaseAdded.emit()
 
-        connection.close()
-        self.close()
+    
 
     def clear(self):
         self.MaterialID.setText("")
@@ -209,17 +247,32 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.VendorName.setText("")
         self.PurchaseDate.setDate(QDate(2000, 1, 1))
         self.purchaseDetailsTable.setRowCount(0)
+        self.vendorTable.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
     def search_material(self):
-        connection = pyodbc.connect(connection_string)
-        cursor = connection.cursor()
-
         if self.MaterialDropDown.currentText() == 'Material ID':
-            search_text = int(self.SearchMaterial_2.text())
-            cursor.execute("SELECT * from Material where materialID = ?", (search_text))
+            try:
+                search_text = int(self.SearchMaterial_2.text())
+                cursor.execute("SELECT * from Material where materialID = ?", (search_text,))
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid integer for Material ID.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
 
         elif self.MaterialDropDown.currentText() == 'Material Name':
-            search_text = str(self.SearchMaterial_2.text())
+            try:
+                search_text = str(self.SearchMaterial_2.text())
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid string for Material Name.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
+
             query = """
                 SELECT * from Material where materialName like (?)
                 """
@@ -234,15 +287,29 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
                 self.MaterialTable.setItem(row_index, col_index, item)
 
     def search_vendor(self):
-        connection = pyodbc.connect(connection_string)
-        cursor = connection.cursor()
-
         if self.VendorDropDown.currentText() == 'Vendor ID':
-            search_text = int(self.SearchVendor_2.text())
-            cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text))
+            try:
+                search_text = int(self.SearchVendor_2.text())
+                cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text,))
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid integer for Vendor ID.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
 
         elif self.VendorDropDown.currentText() == 'Vendor Name':
-            search_text = str(self.SearchVendor_2.text())
+            try:
+                search_text = str(self.SearchVendor_2.text())
+            except ValueError:
+                msgBox = QMessageBox()
+                msgBox.setText("Please enter a valid string for Vendor Name.")
+                msgBox.setWindowTitle("Confirmation Box")
+                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                msgBox.exec()
+                return
+
             query = """
                 SELECT * from Vendor where vendorName like (?)
                 """

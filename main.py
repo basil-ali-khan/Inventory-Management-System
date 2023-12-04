@@ -11,6 +11,7 @@ import MaterialClass
 import EditVendorClass
 import CustomerClass
 from PurchaseClass import PurchaseScreen
+from SaleClass import SaleScreen
 
 from ConnectionString import connection, cursor
 
@@ -26,7 +27,7 @@ class UI(QtWidgets.QMainWindow):
         self.username.setPlaceholderText("Username")
         self.password.setPlaceholderText("Password")
         ###hardcoded for now, will later be enabled only if user has admin priveleges
-
+        self.userID = ''
         self.vendorsButton.setEnabled(False)
         self.customerButton.setEnabled(False)
         self.productsButton.setEnabled(False)
@@ -41,9 +42,13 @@ class UI(QtWidgets.QMainWindow):
         self.materialButton.clicked.connect(self.OpenMaterialScreen)
         self.customerButton.clicked.connect(self.OpenCustomerScreen)
         self.purchaseButton.clicked.connect(self.OpenPurchaseScreen)
+        self.salesButton.clicked.connect(self.OpenSalesScreen)
         self.logoutButton.clicked.connect(self.Logout)
 
         self.logged_in = False
+    def OpenSalesScreen(self):
+        self.sales = SaleScreen(self.userID)
+        self.sales.show()
 
     def OpenPurchaseScreen(self):
         self.purchase = PurchaseScreen()
@@ -68,6 +73,9 @@ class UI(QtWidgets.QMainWindow):
     def CheckPrivilege(self):
         username = self.username.text()
         password = self.password.text()
+        sql_query = "select userid from [User] where userName = ? and password = ?"
+        cursor.execute(sql_query, (username, password))
+        self.userID = cursor.fetchone()[0]
         sql_query = "select privilege from [User] where userName = ? and password = ?"
         cursor.execute(sql_query, (username, password))
         result = cursor.fetchone()

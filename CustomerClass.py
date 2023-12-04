@@ -84,8 +84,8 @@ class CustomerScreen(QtWidgets.QMainWindow):
             self.msg.setText("Contact and Backup contact should be numeric")
         
         else:
-            sql_query = "insert into Customer values(?, ?, ?, ?, ?, ?)"
-            cursor.execute(sql_query, (name, gender, contact, backupContact, email, address))
+            sql_query = "insert into Customer ([customerName],[gender], [contactNumber], [backupContact], [email], [address]) values(?, ?, ?, ?, ?, ?)"
+            cursor.execute(sql_query, (str(name), str(gender), str(contact), str(backupContact), str(email), str(address)))
             connection.commit()
             self.msg.setWindowTitle("Success")
             self.msg.setText("Customer added successfully.")
