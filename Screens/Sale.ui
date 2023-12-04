@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>555</height>
+    <width>730</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,6 +62,9 @@
       <width>681</width>
       <height>201</height>
      </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
     </property>
     <row>
      <property name="text">
@@ -168,9 +171,9 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>440</y>
+      <y>400</y>
       <width>171</width>
-      <height>51</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -367,9 +370,9 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>380</y>
+      <y>360</y>
       <width>171</width>
-      <height>51</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -382,11 +385,37 @@
       <x>530</x>
       <y>320</y>
       <width>171</width>
-      <height>51</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
      <string>View</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="reportsButton">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>440</y>
+      <width>171</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reports</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearButton">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>480</y>
+      <width>171</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
     </property>
    </widget>
   </widget>
@@ -395,7 +424,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>718</width>
+     <width>730</width>
      <height>26</height>
     </rect>
    </property>

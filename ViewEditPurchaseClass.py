@@ -112,6 +112,6 @@ class ViewEditPurchaseScreen(QtWidgets.QMainWindow):
 
         self.msg = QtWidgets.QMessageBox()
         self.msg.setWindowTitle('Success')
-        self.msg.setText('Product edit successful')
+        self.msg.setText('Purchase edit successful')
         self.msg.show()
         

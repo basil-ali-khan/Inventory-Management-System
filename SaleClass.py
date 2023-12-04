@@ -5,12 +5,12 @@ from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QApplication, QMessageBox,QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 import sys
 import pyodbc
-from ViewSaleClass import ViewSaleScreen
+from ViewEditSaleClass import ViewEditSaleScreen
 from AddSaleClass import AddSaleScreen
 
 # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-server = 'LAPTOP-MNMD5RBU'
-database = 'Inventory_Management_System_Script'  # Name of your Northwind database
+server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
+database = 'Inventory_Management_System'  # Name of your Northwind database
 use_windows_authentication = True  # Set to True to use Windows Authentication
 username = 'your_username'  # Specify a username if not using Windows Authentication
 password = 'your_password'  # Specify a password if not using Windows Authentication
@@ -35,8 +35,19 @@ class SaleScreen(QtWidgets.QMainWindow):
         self.addSaleButton.clicked.connect(self.AddSale)
         self.deleteSaleButton.clicked.connect(self.DeleteSale)
         self.searchSaleButton.clicked.connect(self.SearchSale)
+        self.searchFromDate.setDate(QDate(0000, 0, 0))
+        self.searchToDate.setDate(QDate(0000, 0, 0))
+        self.clearButton.clicked.connect(self.PopulateSaleTable)
+        self.reportsButton.clicked.connect(self.OpenReportsScreen)
+
+    def OpenReportsScreen(self):
+        pass
 
     def PopulateSaleTable(self):
+
+        self.searchSaleId.setText('')
+        self.searchCustomerName.setText('')
+        self.searchPhoneNumber.setText('')
 
         cursor.execute("SELECT Sale.saleID, Sale.saleDate, Sale.totalAmount, Customer.customerName, Customer.contactNumber FROM Sale join Customer on sale.customerID = Customer.customerID")
         self.saleTable.setRowCount(0)
@@ -47,20 +58,30 @@ class SaleScreen(QtWidgets.QMainWindow):
                 item = QTableWidgetItem(str(cell_data))
                 self.saleTable.setItem(row_index, col_index, item)
 
+        self.saleTable.resizeColumnsToContents()
+
     def ViewSale(self):
             
         selected_row = self.saleTable.currentRow()
+        if selected_row < 0 or not str(selected_row).isdigit():
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText ("Please select an entry to view.")
+            self.msg.show()
+            return
 
         sale_id = str(self.saleTable.item(selected_row, 0).text())
         sale_date = str(self.saleTable.item(selected_row, 1).text())
-        total_amount = int(self.saleTable.item(selected_row, 2).text()) 
+        total_amount = float(self.saleTable.item(selected_row, 2).text()) 
         customer_name= str(self.saleTable.item(selected_row, 3).text())
 
-        self.viewSale = ViewSaleScreen(sale_id, sale_date, total_amount, customer_name)
+        self.viewSale = ViewEditSaleScreen(sale_id, sale_date, total_amount, customer_name)
+        self.viewSale.editDone.connect(self.PopulateSaleTable)
         self.viewSale.show()
             
     def AddSale(self):
         self.addSale = AddSaleScreen()
+        self.addSale.saleAdded.connect(self.PopulateSaleTable)
         self.addSale.show()
 
     def DeleteSale(self):
@@ -89,8 +110,8 @@ class SaleScreen(QtWidgets.QMainWindow):
             for row in cursor.fetchall():
                 Product_id = row[1]
                 quantity = row[2]
-                cursor.execute ("update Product set units = units - (?) where ProductID = ?", (quantity, Product_id,))
-                cursor.execute ("update Product set units = (?) where ProductID = ? and units < 0", (0, Product_id,))
+                cursor.execute ("update Products set quantityProduced = quantityProduced + (?), quantitySold = quantitySold - (?) where ProductID = ?", (quantity, quantity, Product_id,))
+                # cursor.execute ("update Products set units = (?) where ProductID = ? and units < 0", (0, Product_id,))
 
             cursor.execute("delete from saleProduct WHERE saleID = ?", (sale_id,))
             cursor.execute("delete from sale WHERE saleID = ?", (sale_id,))
@@ -100,7 +121,7 @@ class SaleScreen(QtWidgets.QMainWindow):
             self.msg. setWindowTitle ("Success")
             self.msg.setText ("sale deleted successfully.")
             self.msg.show()
-            self.PopulatesaleTable()
+            self.PopulateSaleTable()
 
     def SearchSale(self):
         saleID = self.searchSaleId.text() 
@@ -133,6 +154,9 @@ class SaleScreen(QtWidgets.QMainWindow):
         if contactNumber:
             query += " AND customer.contactNumber LIKE ? "
             params.append('%' + contactNumber + '%')
+
+        if saleID != '' and customerName != '' and contactNumber != '':
+            QMessageBox.about(self, "Error", "Please enter Sale id, customer name or customer contact")
 
         cursor.execute(query, params)
 

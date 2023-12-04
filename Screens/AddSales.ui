@@ -101,6 +101,9 @@
        <height>211</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
      <row>
       <property name="text">
        <string>1</string>
@@ -211,6 +214,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="ProductName">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>480</x>
@@ -230,7 +236,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>120</y>
+       <y>170</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -243,7 +249,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>170</y>
+       <y>120</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -256,7 +262,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>120</y>
+       <y>170</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -298,7 +304,7 @@
      <property name="geometry">
       <rect>
        <x>480</x>
-       <y>170</y>
+       <y>120</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -363,6 +369,11 @@
        <string>Product Name</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Description</string>
+      </property>
+     </item>
     </widget>
     <widget class="QPushButton" name="SearchProduct">
      <property name="geometry">
@@ -378,6 +389,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="ProductID">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>480</x>
@@ -407,6 +421,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="Address">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>760</x>
@@ -423,6 +440,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="CustomerName">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>760</x>
@@ -439,6 +459,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="CustomerID">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>760</x>
@@ -481,6 +504,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="BackupContactNumber">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>760</x>
@@ -536,6 +562,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="ContactNumber">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>760</x>
@@ -565,6 +594,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="Email">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>760</x>
@@ -601,6 +633,9 @@
        <width>301</width>
        <height>211</height>
       </rect>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <row>
       <property name="text">
@@ -737,6 +772,11 @@
        <string>Customer Name</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Contact Number</string>
+      </property>
+     </item>
     </widget>
     <widget class="QLineEdit" name="SearchCustomerBar">
      <property name="geometry">
@@ -762,7 +802,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Order Date</string>
+     <string>Sale Date</string>
     </property>
    </widget>
    <widget class="QPushButton" name="ClearSale">
@@ -818,6 +858,9 @@
        <width>1011</width>
        <height>221</height>
       </rect>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <column>
       <property name="text">

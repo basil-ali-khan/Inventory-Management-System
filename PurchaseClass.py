@@ -8,6 +8,7 @@ import pyodbc
 from AddPurchaseClass import AddPurchaseScreen
 from ViewEditPurchaseClass import ViewEditPurchaseScreen
 
+
 # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 database = 'Inventory_Management_System'  # Name of your Northwind database
@@ -35,7 +36,7 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         self.addPurchaseButton.clicked.connect(self.AddPurchase)
         self.deletePurchaseButton.clicked.connect(self.DeletePurchase)
         self.searchPurchaseButton.clicked.connect(self.SearchPurchase)
-        self.refreshButton.clicked.connect(self.PopulatePurchaseTable)
+        # self.refreshButton.clicked.connect(self.PopulatePurchaseTable)
 
     def PopulatePurchaseTable(self):
 
