@@ -60,6 +60,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
                 self.MaterialTable.setItem(row_index, col_index, item)
+        self.MaterialTable.resizeColumnsToContents()
 
     def PopulateVendorTable(self):
 
@@ -71,6 +72,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
                 self.vendorTable.setItem(row_index, col_index, item)
+        self.vendorTable.resizeColumnsToContents()
 
     def get_selected_material_data(self):
 
@@ -179,6 +181,13 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         
 
         # self.PurchaseDate.setDate(QDate.currentDate())
+        if self.purchaseDetailsTable.rowCount() == 0:
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please add at least one material to the purchase.")
+            msgBox.setWindowTitle("Error")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+            return
 
         PurchaseDate = self.PurchaseDate.date().toString("yyyy-MM-dd")
 
@@ -214,6 +223,12 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
                     """
             
             cursor.execute(sql_query, (PurchaseID, MaterialID, Quantity, UnitCost))
+            connection.commit()
+
+            sql_query = """update material
+                            set units = units + ?
+               """
+            cursor.execute(sql_query, (Quantity,))
             connection.commit()
             
             # TotalAmount = TotalAmount + (Quantity*UnitCost)

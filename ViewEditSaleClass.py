@@ -52,7 +52,7 @@ class ViewEditSaleScreen(QtWidgets.QMainWindow):
         self.viewCustomerName.setText(str(self.customer_name))
         self.viewCustomerName.setDisabled(True)
 
-        cursor.execute("SELECT Products.ProductID, Products.ProductName, SaleProduct.Quantity, SaleProduct.soldprice, SaleProduct.Quantity*SaleProduct.soldprice, SaleProduct.Discount FROM Sale JOIN SaleProduct ON Sale.saleID = SaleProduct.saleID JOIN Products ON SaleProduct.ProductID = Products.ProductID WHERE Sale.saleID = ?", (sale_id,))
+        cursor.execute("SELECT Products.ProductID, Products.ProductName, SaleProduct.Quantity, SaleProduct.soldprice, SaleProduct.Quantity*SaleProduct.soldprice*SaleProduct.Discount, SaleProduct.Discount FROM Sale JOIN SaleProduct ON Sale.saleID = SaleProduct.saleID JOIN Products ON SaleProduct.ProductID = Products.ProductID WHERE Sale.saleID = ?", (sale_id,))
         self.ProductTable.setRowCount(0)
 
         for row_index, row_data in enumerate(cursor.fetchall()):
