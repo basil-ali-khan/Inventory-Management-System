@@ -7,21 +7,24 @@ import sys
 import pyodbc
 from AddPurchaseClass import AddPurchaseScreen
 from ViewEditPurchaseClass import ViewEditPurchaseScreen
+from PurchaseReportClass import PurchaseReportScreen
 
+# # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
 # server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-server = 'DESKTOP-UMMHQQL\SQLEXPRESS01'
-database = 'Inventory_Management_System'  # Name of your Northwind database
-use_windows_authentication = True  # Set to True to use Windows Authentication
-username = 'your_username'  # Specify a username if not using Windows Authentication
-password = 'your_password'  # Specify a password if not using Windows Authentication
+# database = 'Inventory_Management_System'  # Name of your Northwind database
+# use_windows_authentication = True  # Set to True to use Windows Authentication
+# username = 'your_username'  # Specify a username if not using Windows Authentication
+# password = 'your_password'  # Specify a password if not using Windows Authentication
 
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+# if use_windows_authentication:
+#     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
+# else:
+#     connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
 
-connection = pyodbc.connect(connection_string)
-cursor = connection.cursor()
+# connection = pyodbc.connect(connection_string)
+# cursor = connection.cursor()
+
+from ConnectionString import connection, cursor
 
 class PurchaseScreen(QtWidgets.QMainWindow):   
 
@@ -35,7 +38,11 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         self.addPurchaseButton.clicked.connect(self.AddPurchase)
         self.deletePurchaseButton.clicked.connect(self.DeletePurchase)
         self.searchPurchaseButton.clicked.connect(self.SearchPurchase)
-        self.refreshButton.clicked.connect(self.PopulatePurchaseTable)
+        self.reportsButton.clicked.connect(self.ReportPurchase)
+    
+    def ReportPurchase(self):
+        self.reportPurchase = PurchaseReportScreen()
+        self.reportPurchase.show()
 
     def PopulatePurchaseTable(self):
 
@@ -50,8 +57,17 @@ class PurchaseScreen(QtWidgets.QMainWindow):
 
     def ViewPurchase(self):
             
-        selected_row = self.purchaseTable.currentRow()
+        # selected_row = self.purchaseTable.currentRow()
 
+        selected_items = self.purchaseTable.selectedItems ()
+        if not selected_items:
+            self.msg = QtWidgets. QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText ("Please select an entry to view.")
+            self.msg.show()
+            return
+            
+        selected_row = self.purchaseTable.currentRow()
         purchase_id = str(self.purchaseTable.item(selected_row, 0).text())
         purchase_date = str(self.purchaseTable.item(selected_row, 1).text())
         total_amount = int(self.purchaseTable.item(selected_row, 2).text()) 
@@ -63,6 +79,7 @@ class PurchaseScreen(QtWidgets.QMainWindow):
             
     def AddPurchase(self):
         self.addPurchase = AddPurchaseScreen()
+        # self.addPurchase.addPurchaseButton.connect(self.PopulatePurchaseTable)
         self.addPurchase.show()
 
     def DeletePurchase(self):
@@ -120,8 +137,16 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         params = []
 
         if purchaseId:
-            query += " AND purchase.purchaseID = ? "
-            params.append(purchaseId)
+            if purchaseId.isdigit():
+                query += " AND purchase.purchaseID = ? "
+                params.append(purchaseId)
+
+            else:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('Purchase ID should be numeric')
+
+                self.msg.show()
 
         if vendorName:
             query += " AND vendor.vendorName LIKE ? "
