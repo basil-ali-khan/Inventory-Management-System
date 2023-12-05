@@ -311,6 +311,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="UnitCost">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>360</x>

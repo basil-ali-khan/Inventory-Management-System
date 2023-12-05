@@ -28,6 +28,7 @@ class ViewEditPurchaseScreen(QtWidgets.QMainWindow):
     def __init__(self, purchase_id, purchase_date, total_amount, vendor_name):
         super(ViewEditPurchaseScreen, self).__init__() 
         uic.loadUi("Screens/ViewPurchase.ui", self)
+        self.setWindowTitle("View/Edit Purchase")
 
         self.MaterialTable.itemSelectionChanged.connect(self.get_selected_material_data)
         self.savePurchaseButton.clicked.connect(self.SaveEdit)
@@ -83,37 +84,67 @@ class ViewEditPurchaseScreen(QtWidgets.QMainWindow):
 
     def SaveEdit(self):
         selected_row = self.MaterialTable.currentRow()
+        if selected_row == -1 or self.MaterialName.text() == "":
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please Select a Material!")
+            msgBox.setWindowTitle("Confirmation Box")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+            return
         
         PurchaseID = self.viewPurchaseId.text()
         Quantity = self.Quantity.text()
         UnitCost = self.UnitCost.text()
-        total = int(Quantity) * int(UnitCost)
 
-        self.MaterialTable.item(selected_row, 1).setText(str(Quantity))
-        self.MaterialTable.item(selected_row, 2).setText(str(UnitCost))
-        self.MaterialTable.item(selected_row, 3).setText(str(total))
+        if (
+            Quantity == ""
+            or UnitCost == ""
 
-        self.UpdateTotal()
+        ):
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please Enter All Required Attributes!")
+            msgBox.setWindowTitle("Confirmation Box")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
 
-        sql_query = """
-                    update PurchaseMaterial
-                    set quantity = (?), cost = (?)
-                    WHERE purchaseID = (?) and materialID = (select materialID from Material where materialName = ?)
-                    """
-        
-        cursor.execute(sql_query, (Quantity, UnitCost, PurchaseID, self.MaterialName.text()))
-        connection.commit()
+        elif not Quantity.isdigit() or int(Quantity) <= 0 or (UnitCost.isdigit() == False):
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Please Enter a valid quantity and unit cost!")
+            msgBox.setWindowTitle("Error")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+            msgBox.exec()
 
-        sql_query = """
-                    update Purchase
-                    set totalAmount = (select sum(quantity * cost) from PurchaseMaterial where purchaseID = ?)
-                    WHERE purchaseID = (?)
-                    """
-        cursor.execute(sql_query, (PurchaseID, PurchaseID))
-        connection.commit()
+        else:
 
-        self.msg = QtWidgets.QMessageBox()
-        self.msg.setWindowTitle('Success')
-        self.msg.setText('Purchase edit successful')
-        self.msg.show()
+            self.UpdateTotal()
+
+            sql_query = """
+                        update PurchaseMaterial
+                        set quantity = (?), cost = (?)
+                        WHERE purchaseID = (?) and materialID = (select materialID from Material where materialName = ?)
+                        """
+            
+            cursor.execute(sql_query, (Quantity, UnitCost, PurchaseID, self.MaterialName.text()))
+            connection.commit()
+
+            sql_query = """
+                        update Purchase
+                        set totalAmount = (select sum(quantity * cost) from PurchaseMaterial where purchaseID = ?)
+                        WHERE purchaseID = (?)
+                        """
+            cursor.execute(sql_query, (PurchaseID, PurchaseID))
+            connection.commit()
+
+            self.MaterialTable.setItem(selected_row, 1, QTableWidgetItem(Quantity))
+            self.MaterialTable.setItem(selected_row, 2, QTableWidgetItem(UnitCost))
+            self.MaterialTable.setItem(selected_row, 3, QTableWidgetItem(str(int(Quantity) * int(UnitCost))))
+
+            self.UpdateTotal()
+
+
+
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setWindowTitle('Success')
+            self.msg.setText('Purchase edit successful')
+            self.msg.show()
         

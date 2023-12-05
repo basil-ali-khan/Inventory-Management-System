@@ -29,6 +29,7 @@ class ViewEditSaleScreen(QtWidgets.QMainWindow):
     def __init__(self, sale_id, sale_date, total_amount, customer_name):
         super(ViewEditSaleScreen, self).__init__() 
         uic.loadUi("Screens/ViewEditSale.ui", self)
+        self.setWindowTitle("View/Edit Sale")
 
         self.ProductTable.itemSelectionChanged.connect(self.get_selected_Product_data)
         self.saveSaleButton.clicked.connect(self.SaveEdit)
@@ -103,34 +104,57 @@ class ViewEditSaleScreen(QtWidgets.QMainWindow):
         
         ProductID = self.ProductID.text()
         OldQuantity = self.ProductTable.item(selected_row, 2).text()
+        sql_query = """ 
+                    update products set quantityProduced = quantityProduced + (?), quantitySold = quantitySold - (?) where productID = (?)
+                    """
+        cursor.execute(sql_query, (OldQuantity, OldQuantity, ProductID,))
+        connection.commit()
         Quantity = self.Quantity.text()
         UnitCost = self.UnitCost.text()
         discount = self.editedDiscount.text()
+        try:
+            if int(discount) < 0 or int(discount) > 1:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('Discount should be between 0 and 1')
+                self.msg.show()
+                return
+        except ValueError:
+            if float(discount) < 0 or float(discount) > 1:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('Discount should be between 0 and 1')
+                self.msg.show()
+                return
         if not Quantity.isdigit() or not UnitCost.replace('.', '', 1).isdigit() or not discount.replace('.', '', 1).isdigit():
             self.msg = QtWidgets.QMessageBox()
             self.msg.setWindowTitle('Error')
-            self.msg.setText('No edits made')
+            self.msg.setText('No edits made. Incorrect Values entered')
             self.msg.show()
             return
         total = int(Quantity) * float(UnitCost) * (1- float(discount))
 
-        self.ProductTable.item(selected_row, 2).setText(str(Quantity))
-        self.ProductTable.item(selected_row, 3).setText(str(UnitCost))
-        self.ProductTable.item(selected_row, 4).setText(str(total))
-        self.ProductTable.item(selected_row, 5).setText(str(discount))
+        # self.ProductTable.item(selected_row, 2).setText(str(Quantity))
+        # self.ProductTable.item(selected_row, 3).setText(str(UnitCost))
+        # self.ProductTable.item(selected_row, 4).setText(str(total))
+        # self.ProductTable.item(selected_row, 5).setText(str(discount))
 
-        quantityProducedDiff = int(Quantity) - int(OldQuantity)
-        quantitySoldDiff = -1 * quantityProducedDiff       
+        sql_query = """ select quantityProduced - quantitySold from products where productID = (?) """
+        cursor.execute(sql_query, (ProductID,))
+        newAvailableQuantity = cursor.fetchone()[0]
 
-        cursor.execute(" select quantityProduced, quantitySold from Products where ProductID = ? ", (ProductID,))
-        result = cursor.fetchone()
-        currentProducedQuantity= result[0]
-        currentSoldQuantity = result[1]
+        # quantityProducedDiff = int(Quantity) - int(OldQuantity)
+        # quantitySoldDiff = -1 * quantityProducedDiff       
+
+        # cursor.execute(" select quantityProduced, quantitySold from Products where ProductID = ? ", (ProductID,))
+        # result = cursor.fetchone()
+        # currentProducedQuantity= result[0]
+        # currentSoldQuantity = result[1]
 
 
-        newProducedQuantity = currentProducedQuantity - quantityProducedDiff
-        newSoldQuantity = currentSoldQuantity + quantitySoldDiff
-        newAvailableQuantity = newProducedQuantity - newSoldQuantity
+        # newProducedQuantity = currentProducedQuantity + quantityProducedDiff
+        # newSoldQuantity = currentSoldQuantity - quantitySoldDiff
+        # newAvailableQuantity = newProducedQuantity - newSoldQuantity
 
         if int(Quantity) > int(newAvailableQuantity):
             self.msg = QtWidgets.QMessageBox()
@@ -139,18 +163,23 @@ class ViewEditSaleScreen(QtWidgets.QMainWindow):
             self.msg.show()
             return
         
+        self.ProductTable.item(selected_row, 2).setText(str(Quantity))
+        self.ProductTable.item(selected_row, 3).setText(str(UnitCost))
+        self.ProductTable.item(selected_row, 4).setText(str(total))
+        self.ProductTable.item(selected_row, 5).setText(str(discount))
+        
         self.UpdateTotal()
 
-        sql_query = """
-                    UPDATE products
-                    SET quantityProduced = (?), quantitySold =  (?)
-                    WHERE productID = (?)
-                    """
-        cursor.execute(sql_query, (newProducedQuantity, newSoldQuantity, ProductID))
-        connection.commit()
+        # sql_query = """
+        #             UPDATE products
+        #             SET quantityProduced = (?), quantitySold =  (?)
+        #             WHERE productID = (?)
+        #             """
+        # cursor.execute(sql_query, (newProducedQuantity, newSoldQuantity, ProductID))
+        # connection.commit()
 
-        cursor.execute(" select quantityProduced from Products where ProductID = ? ", (ProductID,))
-        availableQuantity = cursor.fetchone()[0]
+        # cursor.execute(" select quantityProduced from Products where ProductID = ? ", (ProductID,))
+        # availableQuantity = cursor.fetchone()[0]
 
         # if int(Quantity) > int(availableQuantity):
         #     self.msg = QtWidgets.QMessageBox()

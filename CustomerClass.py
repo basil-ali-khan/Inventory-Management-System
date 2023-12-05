@@ -21,6 +21,7 @@ class CustomerScreen(QtWidgets.QMainWindow):
         uic.loadUi('Screens/Customers.ui', self)
 
         self.PopulateCustomerTable()
+        self.setWindowTitle("Customers")
         self.searchCustomerValue.setPlaceholderText("Search")
         self.addCustomerButton.clicked.connect(self.AddCustomer)
         self.editCustomerButton.clicked.connect(self.EditCustomer)
@@ -90,6 +91,12 @@ class CustomerScreen(QtWidgets.QMainWindow):
             self.msg.setWindowTitle("Success")
             self.msg.setText("Customer added successfully.")
             self.PopulateCustomerTable()
+            self.customerName.setText('')
+            self.customerContact.setText('')
+            self.customerBackup.setText('')
+            self.customerEmail.setText('')
+            self.customerAddress.setText('')
+
         self.msg.show()
 
     def SearchCustomer(self):
@@ -106,6 +113,7 @@ class CustomerScreen(QtWidgets.QMainWindow):
             self.msg.setWindowTitle("Error")
             self.msg.setText("Please enter a search value.")
             self.msg.show()
+            self.PopulateCustomerTable()
             return
 
         sql_query = f"select * from Customer where {criteria} like ?"

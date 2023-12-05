@@ -18,6 +18,7 @@ class MaterialScreen(QtWidgets.QMainWindow):
         uic.loadUi('Screens/Materials.ui', self)
 
         self.PopulateMaterialTable()
+        self.setWindowTitle("Materials")
 
         self.searchMaterialButton.clicked.connect(self.SearchMaterial)
 

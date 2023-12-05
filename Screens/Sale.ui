@@ -389,7 +389,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>View</string>
+     <string>View/Edit</string>
     </property>
    </widget>
    <widget class="QPushButton" name="reportsButton">

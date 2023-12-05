@@ -13,6 +13,7 @@ class EditVendorScreen(QtWidgets.QMainWindow):
     def __init__(self, vendor_data):
         super(EditVendorScreen, self).__init__()
         uic.loadUi('Screens/EditVendors.ui', self)
+        self.setWindowTitle("Edit Vendor")
 
         # Assuming your UI file has QLineEdit widgets named vendorNameEdit, contactNumberEdit, emailEdit, addressEdit
         self.nameText.setText(vendor_data[1])

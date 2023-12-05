@@ -14,6 +14,7 @@ class TopCustomerScreen(QtWidgets.QMainWindow):
         super(TopCustomerScreen, self).__init__()
 
         uic.loadUi('Screens/TopCustomers.ui', self)
+        
 
         self.setWindowTitle("Top Customers")
 

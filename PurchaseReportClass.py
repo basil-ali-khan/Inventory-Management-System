@@ -11,6 +11,7 @@ class PurchaseReportScreen(QtWidgets.QMainWindow):
         super(PurchaseReportScreen, self).__init__()
 
         uic.loadUi('Screens/PurchaseReport.ui', self)
+        self.setWindowTitle("Purchase Report")
 
         self.generate.clicked.connect(self.GenerateReport)
         self.moneytext.setReadOnly(True)

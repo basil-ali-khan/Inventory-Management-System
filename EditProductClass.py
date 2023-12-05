@@ -15,6 +15,7 @@ class EditProductScreen(QtWidgets.QMainWindow):
         uic.loadUi("Screens/EditProducts.ui", self)
 
         # self.productId = id
+        self.setWindowTitle("Edit Product")
         self.productIdBox.setText(id)
         self.productNameBox.setText(name)
         self.qtyProducedBox.setText(qtyProduced)

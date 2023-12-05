@@ -13,6 +13,7 @@ class EditCustomerScreen(QtWidgets.QMainWindow):
     def __init__(self, customer_data):
         super(EditCustomerScreen, self).__init__()
         uic.loadUi('Screens/EditCustomer.ui', self)
+        self.setWindowTitle("Edit Customer")
 
         # Assuming your UI file has QLineEdit widgets named vendorNameEdit, contactNumberEdit, emailEdit, addressEdit
         self.nameText.setText(customer_data[1])

@@ -17,6 +17,7 @@ class ProductScreen(QtWidgets.QMainWindow):
         uic.loadUi('Screens/Products.ui', self)
 
         self.PopulateProductTable()
+        self.setWindowTitle("Products")
 
         self.addProductButton.clicked.connect(self.AddProduct)
 
@@ -125,18 +126,23 @@ class ProductScreen(QtWidgets.QMainWindow):
 
             if criteria == 'Product Name':
                 sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where productName like (?)'
+                cursor.execute(sql_query, ('%' + criteriaValue + '%',))
             elif criteria == 'Quantity Produced':
                 sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where quantityProduced = (?)'
+                cursor.execute(sql_query, (criteriaValue,))
             elif criteria == 'Quantity Sold':
                 sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where quantitySold = (?)'
+                cursor.execute(sql_query, (criteriaValue,))
             elif criteria == 'Quantity Available':
                 sql_query = "select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID  where quantityProduced - quantitySold = (?)"
+                cursor.execute(sql_query, (criteriaValue,))
             elif criteria == 'Category Name':
                 sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where categoryName = (?)'
+                cursor.execute(sql_query, ('%' + criteriaValue + '%',))
             elif criteria == 'Price':
                 sql_query = 'select productID, productName, [description], price, quantityProduced, quantitySold, categoryName from Products inner join Category on products.categoryID = Category.categoryID where price = (?)'
-
-            cursor.execute(sql_query, (criteriaValue,))
+                cursor.execute(sql_query, (criteriaValue,))
+            # cursor.execute(sql_query, ('%' + criteriaValue + '%',))
 
             print('Query executed')
 
@@ -150,10 +156,10 @@ class ProductScreen(QtWidgets.QMainWindow):
                 self.msg.setWindowTitle("No Results")
                 self.msg.setText("No results found for the given search criteria.")
                 self.msg.show()
-                self.PopulateProductTable()
+                # self.PopulateProductTable()
                 return
 
-            for row_index, row_data in enumerate(cursor.fetchall()):
+            for row_index, row_data in enumerate(rows):
                 print('populating row')
                 self.productTable.insertRow(row_index)
                 for col_index, cell_data in enumerate(row_data):

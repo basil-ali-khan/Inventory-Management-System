@@ -16,6 +16,7 @@ class EditMaterialScreen(QtWidgets.QMainWindow):
         
         # Load the .ui file
         uic.loadUi('Screens/EditMaterial.ui', self)
+        self.setWindowTitle("Edit Material")
 
         self.materialIdBox.setText(id)
         self.materialNameBox.setText(name)

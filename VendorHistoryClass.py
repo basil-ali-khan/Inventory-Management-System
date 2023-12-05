@@ -16,6 +16,8 @@ class VendorHistoryScreen(QtWidgets.QMainWindow):
         # Load the .ui file
         uic.loadUi('Screens/VendorHistory.ui', self)
 
+        self.setWindowTitle("Vendor History")
+
         self.Vendor_id = Vendor_id
         self.Vendor_name = Vendor_name
         self.contact = contact

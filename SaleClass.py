@@ -32,6 +32,7 @@ class SaleScreen(QtWidgets.QMainWindow):
         
         super(SaleScreen, self).__init__() 
         uic.loadUi('Screens/Sale.ui', self)
+        self.setWindowTitle("Sale")
 
         self.userID = userID
 
@@ -146,8 +147,16 @@ class SaleScreen(QtWidgets.QMainWindow):
         params = []
 
         if saleID:
-            query += " AND Sale.saleID = ? "
-            params.append(saleID)
+            if saleID.isdigit():
+                query += " AND Sale.saleID = ? "
+                params.append(saleID)
+
+            else:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('SaleID should be numeric')
+
+                self.msg.show()
 
         if customerName:
             query += " AND customer.customerName LIKE ? "
@@ -158,8 +167,16 @@ class SaleScreen(QtWidgets.QMainWindow):
             params.extend([fromDate, toDate])
 
         if contactNumber:
-            query += " AND customer.contactNumber LIKE ? "
-            params.append('%' + contactNumber + '%')
+            if contactNumber.isdigit():
+                query += " AND customer.contactNumber LIKE ? "
+                params.append('%' + contactNumber + '%')
+
+            else:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('Contact Number should be numeric')
+
+                self.msg.show()
 
         if saleID != '' and customerName != '' and contactNumber != '':
             QMessageBox.about(self, "Error", "Please enter Sale id, customer name or customer contact")
@@ -173,6 +190,3 @@ class SaleScreen(QtWidgets.QMainWindow):
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
                 self.saleTable.setItem(row_index, col_index, item)
-
-
-            

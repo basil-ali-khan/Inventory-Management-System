@@ -84,7 +84,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>  Search</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string extracomment="Search"/>
     </property>
    </widget>
    <widget class="QPushButton" name="editProductButton">

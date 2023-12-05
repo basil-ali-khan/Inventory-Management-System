@@ -32,6 +32,7 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         
         super(PurchaseScreen, self).__init__() 
         uic.loadUi('Screens/Purchase.ui', self)
+        self.setWindowTitle("Purchase")
 
         self.PopulatePurchaseTable()        
         self.viewPurchaseButton.clicked.connect(self.ViewPurchase)
@@ -57,8 +58,17 @@ class PurchaseScreen(QtWidgets.QMainWindow):
 
     def ViewPurchase(self):
             
-        selected_row = self.purchaseTable.currentRow()
+        # selected_row = self.purchaseTable.currentRow()
 
+        selected_items = self.purchaseTable.selectedItems ()
+        if not selected_items:
+            self.msg = QtWidgets. QMessageBox()
+            self.msg.setWindowTitle("Error")
+            self.msg.setText ("Please select an entry to view.")
+            self.msg.show()
+            return
+            
+        selected_row = self.purchaseTable.currentRow()
         purchase_id = str(self.purchaseTable.item(selected_row, 0).text())
         purchase_date = str(self.purchaseTable.item(selected_row, 1).text())
         total_amount = int(self.purchaseTable.item(selected_row, 2).text()) 
@@ -70,7 +80,7 @@ class PurchaseScreen(QtWidgets.QMainWindow):
             
     def AddPurchase(self):
         self.addPurchase = AddPurchaseScreen()
-        self.addPurchase.editDone.connect(self.PopulatePurchaseTable)
+        # self.addPurchase.addPurchaseButton.connect(self.PopulatePurchaseTable)
         self.addPurchase.show()
 
     def DeletePurchase(self):
@@ -128,8 +138,16 @@ class PurchaseScreen(QtWidgets.QMainWindow):
         params = []
 
         if purchaseId:
-            query += " AND purchase.purchaseID = ? "
-            params.append(purchaseId)
+            if purchaseId.isdigit():
+                query += " AND purchase.purchaseID = ? "
+                params.append(purchaseId)
+
+            else:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setWindowTitle('Error')
+                self.msg.setText('Purchase ID should be numeric')
+
+                self.msg.show()
 
         if vendorName:
             query += " AND vendor.vendorName LIKE ? "

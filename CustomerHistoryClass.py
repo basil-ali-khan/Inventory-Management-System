@@ -15,6 +15,7 @@ class CustomerHistoryScreen(QtWidgets.QMainWindow):
         
         # Load the .ui file
         uic.loadUi('Screens/CustomerHistory.ui', self)
+        self.setWindowTitle("Customer History")
 
         self.customer_id = customer_id
         self.customer_name = customer_name

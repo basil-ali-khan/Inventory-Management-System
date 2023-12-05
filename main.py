@@ -23,6 +23,7 @@ class UI(QtWidgets.QMainWindow):
         # Load the .ui file
         uic.loadUi('Screens/UserAuthentication.ui', self)
         self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
+        self.setWindowTitle("User Authentication")
 
         self.username.setPlaceholderText("Username")
         self.password.setPlaceholderText("Password")
@@ -73,14 +74,17 @@ class UI(QtWidgets.QMainWindow):
     def CheckPrivilege(self):
         username = self.username.text()
         password = self.password.text()
-        sql_query = "select userid from [User] where userName = ? and password = ?"
-        cursor.execute(sql_query, (username, password))
-        self.userID = cursor.fetchone()[0]
+        # sql_query = "select userid from [User] where userName = ? and password = ?"
+        # cursor.execute(sql_query, (username, password))
+        # self.userID = cursor.fetchone()[0]
         sql_query = "select privilege from [User] where userName = ? and password = ?"
         cursor.execute(sql_query, (username, password))
         result = cursor.fetchone()
         if result is not None:
             result = result[0]
+            sql_query = "select userid from [User] where userName = ? and password = ?"
+            cursor.execute(sql_query, (username, password))
+            self.userID = cursor.fetchone()[0]
             if result == 'Admin':
                 self.vendorsButton.setEnabled(True)
                 self.customerButton.setEnabled(True)

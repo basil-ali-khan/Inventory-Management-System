@@ -29,6 +29,8 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         super(AddPurchaseScreen, self).__init__()
         uic.loadUi("Screens/AddPurchase.ui", self)
 
+        self.setWindowTitle("Add Purchase")
+
         self.PopulateMaterialTable()
         self.PopulateVendorTable()
 
@@ -39,6 +41,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.MaterialName.setDisabled(True)
         self.VendorID.setDisabled(True)
         self.VendorName.setDisabled(True)
+        self.PurchaseDate.setDate(QDate.currentDate())
 
         self.AddMaterialVendor.clicked.connect(self.add_material_vendor)
         self.AddPurchase.clicked.connect(self.add_purchase)
@@ -175,7 +178,7 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
     def add_purchase(self):
         
 
-        self.PurchaseDate.setDate(QDate.currentDate())
+        # self.PurchaseDate.setDate(QDate.currentDate())
 
         PurchaseDate = self.PurchaseDate.date().toString("yyyy-MM-dd")
 
@@ -250,10 +253,16 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
         self.vendorTable.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
     def search_material(self):
+        # if self.MaterialDropDown.currentText() == '' or self.SearchMaterial_2.text() == '':
+        #     QMessageBox.critical(self, "Error", "Please select a search criteria and enter a search text.")
+        #     return
         if self.MaterialDropDown.currentText() == 'Material ID':
             try:
-                search_text = int(self.SearchMaterial_2.text())
-                cursor.execute("SELECT * from Material where materialID = ?", (search_text,))
+                search_text = self.SearchMaterial_2.text()
+                if self.SearchMaterial_2.text() == '':
+                    self.PopulateMaterialTable()
+                    return
+                cursor.execute("SELECT * from Material where materialID = ?", (int(search_text),))
             except ValueError:
                 msgBox = QMessageBox()
                 msgBox.setText("Please enter a valid integer for Material ID.")
@@ -289,25 +298,32 @@ class AddPurchaseScreen(QtWidgets.QMainWindow):
     def search_vendor(self):
         if self.VendorDropDown.currentText() == 'Vendor ID':
             try:
-                search_text = int(self.SearchVendor_2.text())
-                cursor.execute("SELECT * from Vendor where vendorID = ?", (search_text,))
+                search_text = self.SearchVendor_2.text()
+                if search_text == '':
+                    self.PopulateVendorTable()
+                    return
+                cursor.execute("SELECT * from Vendor where vendorID = ?", (int(search_text),))
+                # search_text = int(self.SearchVendor_2.text())
+                
             except ValueError:
                 msgBox = QMessageBox()
                 msgBox.setText("Please enter a valid integer for Vendor ID.")
                 msgBox.setWindowTitle("Confirmation Box")
                 msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
                 msgBox.exec()
+                # self.PopulateVendorTable()
                 return
 
         elif self.VendorDropDown.currentText() == 'Vendor Name':
             try:
                 search_text = str(self.SearchVendor_2.text())
             except ValueError:
-                msgBox = QMessageBox()
-                msgBox.setText("Please enter a valid string for Vendor Name.")
-                msgBox.setWindowTitle("Confirmation Box")
-                msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
-                msgBox.exec()
+                # msgBox = QMessageBox()
+                # msgBox.setText("Please enter a valid string for Vendor Name.")
+                # msgBox.setWindowTitle("Confirmation Box")
+                # msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+                # msgBox.exec()
+                self.PopulateVendorTable()
                 return
 
             query = """

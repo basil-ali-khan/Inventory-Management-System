@@ -30,6 +30,7 @@ class AddSaleScreen(QtWidgets.QMainWindow):
 
         self.PopulateProductTable()
         self.PopulateCustomerTable()
+        self.setWindowTitle("Add Sale")
 
         self.ProductTable.itemSelectionChanged.connect(self.get_selected_product_data)
         self.CustomerTable.itemSelectionChanged.connect(self.get_selected_customer_data)
@@ -40,6 +41,8 @@ class AddSaleScreen(QtWidgets.QMainWindow):
         self.ProductName.setDisabled(True)
         self.CustomerID.setDisabled(True)
         self.CustomerName.setDisabled(True)
+        # self.CustomerName.setDisabled(True)
+        self.SaleDate.setDate(QDate.currentDate())
 
         self.AddProductCustomer.clicked.connect(self.add_product_customer)
         self.AddSale.clicked.connect(self.add_sale)
@@ -168,10 +171,10 @@ class AddSaleScreen(QtWidgets.QMainWindow):
 
         else:
             
-            cursor.execute(" select quantityProduced from Products where ProductID = ? ", (product_id,))
+            cursor.execute(" select quantityProduced - quantitySold from Products where ProductID = ?", (product_id,))
             availableQuantity = cursor.fetchone()
 
-            if int(availableQuantity.quantityProduced) >= int(quantity):
+            if int(availableQuantity[0]) >= int(quantity):
 
                 total = float(price) * int(quantity) * (1 - float(discount))
 
@@ -208,10 +211,16 @@ class AddSaleScreen(QtWidgets.QMainWindow):
 
     def add_sale(self):
 
-        self.SaleDate.setDate(QDate.currentDate())
+
+        # self.SaleDate.setDate(QDate.currentDate())
         SaleDate = self.SaleDate.date().toString("yyyy-MM-dd")
         num_rows = self.SaleDetailsTable.rowCount()
-        UserID = 2
+        # UserID = 2
+
+        if not num_rows > 0:
+            error_message = "Error: No Products Added!"
+            QMessageBox.critical(self, "Error", error_message)
+            return
         
         # cursor.execute("SELECT max(saleID) AS SaleID from Sale")
         # result = cursor.fetchone()
@@ -225,7 +234,7 @@ class AddSaleScreen(QtWidgets.QMainWindow):
         for row in range(num_rows):
             TotalAmount = TotalAmount + float(self.SaleDetailsTable.item(row, 7).text())
 
-        CustomerID = int(self.SaleDetailsTable.item(row, 2).text())
+        CustomerID = self.CustomerID.text()
 
         sql_query = """
             INSERT INTO [Sale]
@@ -258,10 +267,10 @@ class AddSaleScreen(QtWidgets.QMainWindow):
 
             sql_query = """
             UPDATE Products
-            SET quantityProduced = quantityProduced - (?), quantitySold = quantitySold + (?)
+            SET quantitySold = quantitySold + (?)
             WHERE productID = (?)
             """
-            cursor.execute(sql_query, (Quantity, Quantity, ProductID))
+            cursor.execute(sql_query, (Quantity, ProductID))
             connection.commit()
 
         QtWidgets.QMessageBox.information(
@@ -287,9 +296,6 @@ class AddSaleScreen(QtWidgets.QMainWindow):
         self.SaleDetailsTable.setRowCount(0)
 
     def search_product(self):
-        connection = pyodbc.connect(connection_string)
-        cursor = connection.cursor()
-
         if self.ProductDropDown.currentText() == 'Product ID':
             try:
                 search_text = int(self.SearchProductBar.text())
@@ -370,9 +376,6 @@ class AddSaleScreen(QtWidgets.QMainWindow):
             self.ProductTable.resizeColumnsToContents()
 
     def search_customer(self):
-        connection = pyodbc.connect(connection_string)
-        cursor = connection.cursor()
-
         if self.CustomerDropDown.currentText() == 'Customer ID':
             try:
                 search_text = int(self.SearchCustomerBar.text())
